@@ -1,0 +1,68 @@
+﻿<Window x:Class="CookingAI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CookingAI"
+        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
+        Title="Cooking With Intellegence" Height="400" Width="600" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="237*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5">
+                <TextBlock Text="I would like to make" Margin="10" FontSize="14" FontWeight="Bold"/>
+                <ComboBox Name="cbox_meals" Width="100" IsEditable="true" Margin="10" DisplayMemberPath="RecipeName" MaxDropDownHeight="100" IsTextSearchEnabled="False"></ComboBox>
+                <TextBlock Text="for" Margin="10" FontSize="14" FontWeight="Bold"/>
+                <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10"></TextBox>
+                <TextBlock Text="person(s)." Margin="10,10,0,10" FontSize="14" FontWeight="Bold"></TextBlock>
+            <Button Name="btn_Check" Margin="10" Width="100" Content="Is it Possible?" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Click="btn_Check_Click"/>
+        </StackPanel>
+
+            <GridSplitter Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <!--<RowDefinition Height="40*"/>-->
+                <RowDefinition Height="182*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <StackPanel Name="spanel_Home" Orientation="Horizontal" Grid.Row="0">
+                <TextBlock Margin="10" TextWrapping="Wrap" Width="250" VerticalAlignment="Center" HorizontalAlignment="Center">This is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not</TextBlock>
+                <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\medit_diet-768x403.jpg" Width="340"></Image>
+            </StackPanel>
+            <StackPanel Name="spanel_Result"  Orientation="Vertical" Grid.Row="0" Visibility="Hidden">
+                <StackPanel Name="spanel_resultText" Orientation="Horizontal">
+                    <TextBlock Name="tblock_result" Margin="10" VerticalAlignment="Center" FontSize="14"></TextBlock>
+
+                    <StackPanel Name="spanel_portionStack" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBox Name="tbox_resultPortion" Margin="10" Width="50" HorizontalContentAlignment="Center" Text="{Binding ElementName=tbox_Servings,Path=Text}"></TextBox>
+                        <TextBlock Text="person(s)." FontSize="14" VerticalAlignment="Center"></TextBlock>
+                       
+                    </StackPanel>
+                </StackPanel>
+                <ListBox Name="lbox_ingredientsRequired" Margin="10">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!--<CheckBox Name="{Binding IngredientName}"></CheckBox>-->
+                            <TextBlock>
+                            <Run Text="{Binding IngredientName}"/>
+                            <Run Text=" - "/>
+                            <Run Text="{Binding ElementName=tbox_Servings,Path=Text}"/>
+                            <Run Text="{Binding QuantityUnit}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Name="tblock_MissingIngredients" Margin="10"></TextBlock>
+            </StackPanel>
+            <Button Name="btn_Home" Margin="10" Grid.Row="2" HorizontalAlignment="Left" Visibility="Hidden" Click="btn_Home_Click" >
+                <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\home.JPG"  ></Image>
+            </Button>
+            <Button Name="btn_ManageIngredients" Content="Manage Ingredients" FontSize="14" FontWeight="Bold" Grid.Row="2" Width="150" HorizontalAlignment="Right" VerticalAlignment="center" Margin="0,15,15,15" Click="btn_ManageIngredients_Click"></Button>
+
+
+        </Grid>
+    </Grid>
+</Window>
