@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:CookingAI"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="Cooking With Intellegence" Height="400" Width="600" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <local:MultiplyConverter x:Key="MultiplyConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
@@ -16,8 +19,8 @@
                 <TextBlock Text="I would like to make" Margin="10" FontSize="14" FontWeight="Bold"/>
                 <ComboBox Name="cbox_meals" Width="100" IsEditable="true" Margin="10" DisplayMemberPath="RecipeName" MaxDropDownHeight="100" IsTextSearchEnabled="False"></ComboBox>
                 <TextBlock Text="for" Margin="10" FontSize="14" FontWeight="Bold"/>
-                <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10"></TextBox>
-                <TextBlock Text="person(s)." Margin="10,10,0,10" FontSize="14" FontWeight="Bold"></TextBlock>
+            <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10" />
+            <TextBlock Text="person(s)." Margin="10,10,0,10" FontSize="14" FontWeight="Bold"></TextBlock>
             <Button Name="btn_Check" Margin="10" Width="100" Content="Is it Possible?" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Click="btn_Check_Click"/>
         </StackPanel>
 
@@ -37,7 +40,7 @@
                     <TextBlock Name="tblock_result" Margin="10" VerticalAlignment="Center" FontSize="14"></TextBlock>
 
                     <StackPanel Name="spanel_portionStack" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Name="tbox_resultPortion" Margin="10" Width="50" HorizontalContentAlignment="Center" Text="{Binding ElementName=tbox_Servings,Path=Text}"></TextBox>
+                        <TextBox Name="tbox_resultPortion" Margin="10" Width="50" HorizontalContentAlignment="Center" Text="{Binding ElementName=tbox_Servings,Path=Text}"  TextChanged="tbox_resultPortion_TextChanged" GotFocus="tbox_resultPortion_GotFocus" ></TextBox>
                         <TextBlock Text="person(s)." FontSize="14" VerticalAlignment="Center"></TextBlock>
                        
                     </StackPanel>
@@ -49,7 +52,14 @@
                             <TextBlock>
                             <Run Text="{Binding IngredientName}"/>
                             <Run Text=" - "/>
-                            <Run Text="{Binding ElementName=tbox_Servings,Path=Text}"/>
+                             <Run>
+                                 <Run.Text>
+                                     <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                         <Binding Path="IngredientQty"/>
+                                         <Binding ElementName="tbox_resultPortion" Path="Text"/>
+                                     </MultiBinding>
+                                 </Run.Text>
+                             </Run>
                             <Run Text="{Binding QuantityUnit}"/>
                             </TextBlock>
                         </DataTemplate>

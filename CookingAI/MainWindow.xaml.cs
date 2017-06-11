@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -27,7 +29,8 @@ namespace CookingAI
         //ObservableCollection<Ingredient> _availableIngredients;
         List<string> ingredientsFound;
         List<string> ingredientsNotFound;
-
+        int portionSize;
+        Boolean initialState = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -149,7 +152,7 @@ namespace CookingAI
 
         private void checkPossibility(string selectedRecipeName)
         {
-            int portionSize = int.Parse(tbox_Servings.Text.ToString());
+            portionSize = int.Parse(tbox_Servings.Text.ToString());
             Recipe selectedRecipe = App._recipes.SingleOrDefault(r => r.RecipeName.Equals(selectedRecipeName));
             App._availableIngredients = new ObservableCollection<Ingredient>((from i in App._ingredients where i.IngredientQty != 0 select i).ToList());
             if (selectedRecipe == null || selectedRecipe.RequiredIngredients == null
@@ -171,7 +174,7 @@ namespace CookingAI
                         }
                         else
                         {
-                            if (ingredientRequired.IngredientName == ingredientAvailable.IngredientName && ingredientRequired.IngredientQty <= ingredientAvailable.IngredientQty && ingredientRequired.QuantityUnit == ingredientAvailable.QuantityUnit)
+                            if (ingredientRequired.IngredientName == ingredientAvailable.IngredientName && (ingredientRequired.IngredientQty*portionSize) <= ingredientAvailable.IngredientQty && ingredientRequired.QuantityUnit == ingredientAvailable.QuantityUnit)
                             {
                                 ingredientsFound.Add(ingredientAvailable.IngredientName);
                                 flag = true;
@@ -205,6 +208,53 @@ namespace CookingAI
             tblock_result.Text = string.Empty;
             cbox_meals.SelectedIndex = -1;
             btn_Home.Visibility = Visibility.Hidden;
+        }
+
+        private void tbox_Servings_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(initialState)
+            {
+                Regex check_input = new Regex(@"^[0-9]+$");
+                if (check_input.IsMatch(tbox_Servings.Text))
+                {
+                    btn_Check_Click(sender, e);
+                }
+                else
+                {
+                    MessageBox.Show("Please enter digits for no. of persons/servings");
+                }
+                initialState = true;
+            }
+            
+        }
+
+        private void checkPortionValue()
+        {
+            Regex check_input = new Regex(@"^[0-9]+$");
+            if (check_input.IsMatch(tbox_Servings.Text))
+            {
+                btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+            else
+            {
+                MessageBox.Show("Please enter only digits for no. of persons/servings");
+            }
+        }
+
+        private void tbox_resultPortion_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(initialState)
+            {
+                checkPortionValue();
+            }
+            initialState = true;
+        }
+
+        private void tbox_resultPortion_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //textbox should remain selected so as to not call text changed wen empty..
+            tbox_resultPortion.SelectionStart = 0;
+            tbox_resultPortion.SelectionLength = tbox_resultPortion.Text.Length;
         }
     }
 }

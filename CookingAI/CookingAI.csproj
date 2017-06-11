@@ -57,6 +57,7 @@
     <Compile Include="Manage_Ingredients.xaml.cs">
       <DependentUpon>Manage_Ingredients.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MultiplyConverter.cs" />
     <Compile Include="MyStorage.cs" />
     <Compile Include="Recipe.cs" />
     <Page Include="MainWindow.xaml">
