@@ -85,7 +85,7 @@
                 <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\home.JPG"  ></Image>
             </Button>
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Name="btn_addToCart" Content="Add to cart" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Width="100"></Button>
+                <Button Name="btn_addToCart" Content="Add to cart" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Width="100" Click="btn_addToCart_Click" ></Button>
                 <Button Name="btn_ManageIngredients" Content="Manage Ingredients" FontSize="14" FontWeight="Bold" Grid.Row="2" Width="150" Height="25" Margin="10" Click="btn_ManageIngredients_Click"></Button>
             </StackPanel>
 

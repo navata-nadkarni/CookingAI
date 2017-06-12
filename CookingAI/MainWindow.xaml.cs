@@ -27,8 +27,7 @@ namespace CookingAI
         //ObservableCollection<Ingredient> _ingredients = new ObservableCollection<Ingredient>();
         //List<Recipe> _recipes = new List<Recipe>();
         //ObservableCollection<Ingredient> _availableIngredients;
-        List<string> ingredientsFound;
-        List<string> ingredientsNotFound;
+        
         List<Ingredient> ingredientsAbsent=new List<Ingredient>();
         List<Ingredient> ingredientsPresent = new List<Ingredient>();
         int portionSize;
@@ -86,6 +85,7 @@ namespace CookingAI
             //_ingredients = MyStorage.readXML<ObservableCollection<Ingredient>>("ingredients.xml");
             cbox_meals.ItemsSource = App._recipes;
             tbox_Servings.Text = "1";
+            //App._shoppingCart = new ObservableCollection<Ingredient>();
             //var availableIngredients = from i in _ingredients where i.IngredientQty !=0 select i;
             //_available = new ObservableCollection<Ingredient>((from i in _ingredients where i.IngredientQty != 0 select i).ToList());
             //lview_Ingredients.ItemsSource = availableIngredients;
@@ -101,6 +101,7 @@ namespace CookingAI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
            MyStorage.storeXML<List<Recipe>>(App._recipes, "recipes.xml");
+            
             //MyStorage.storeXML<ObservableCollection<Ingredient>>(_ingredients, "ingredients.xml");
         }
 
@@ -300,6 +301,35 @@ namespace CookingAI
             //textbox should remain selected so as to not call text changed when empty..
             tbox_resultPortion.SelectionStart = 0;
             tbox_resultPortion.SelectionLength = tbox_resultPortion.Text.Length;
+        }
+
+        private void btn_addToCart_Click(object sender, RoutedEventArgs e)
+        {
+          
+            foreach (Ingredient missingIngredient in ingredientsAbsent)
+            {
+                if(App._shoppingCart!=null)
+                {
+                    Ingredient checkIfExists = (Ingredient)App._shoppingCart.SingleOrDefault(i => i.IngredientName.Equals(missingIngredient.IngredientName));
+                    if (checkIfExists == null)
+                    {
+                        App._shoppingCart.Add(missingIngredient);
+                    }
+                    else
+                    {
+                        checkIfExists.IngredientQty = checkIfExists.IngredientQty + missingIngredient.IngredientQty;
+                        //App._shoppingCart.Add(checkIfExists);
+                    }
+                }
+                else
+                {
+                    App._shoppingCart.Add(missingIngredient);
+                }
+
+               
+            }
+            MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
+            MessageBox.Show("Added");
         }
     }
 }
