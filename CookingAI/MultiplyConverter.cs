@@ -20,11 +20,18 @@ namespace CookingAI
          constant and quantity*/
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if(values[1].ToString()==string.Empty || values[0].ToString()==string.Empty)
+            {
+                return 0;
+            }
+            else
+            {
+                double a = double.Parse(values[0].ToString());
+                double b = double.Parse(values[1].ToString());
+                double returnvalue = a * b;
+                return returnvalue.ToString();
+            }
             
-            double a = double.Parse(values[0].ToString());
-            double b = double.Parse(values[1].ToString());
-            double returnvalue = a * b;
-            return returnvalue.ToString();
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

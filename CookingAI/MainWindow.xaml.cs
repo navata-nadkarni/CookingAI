@@ -29,6 +29,8 @@ namespace CookingAI
         //ObservableCollection<Ingredient> _availableIngredients;
         List<string> ingredientsFound;
         List<string> ingredientsNotFound;
+        List<Ingredient> ingredientsAbsent=new List<Ingredient>();
+        List<Ingredient> ingredientsPresent = new List<Ingredient>();
         int portionSize;
         Boolean initialState = false;
         public MainWindow()
@@ -104,45 +106,42 @@ namespace CookingAI
 
         private void btn_Check_Click(object sender, RoutedEventArgs e)
         {
+
             if(cbox_meals.SelectedIndex!=-1 && tbox_Servings.Text!=string.Empty)
             {
                 spanel_Home.Visibility = Visibility.Hidden;
                 spanel_Result.Visibility = Visibility.Visible;
-                ingredientsFound = new List<string>();
-                ingredientsNotFound = new List<string>();
-                checkPossibility(((Recipe)cbox_meals.SelectedItem).RecipeName.ToString());
+                ingredientsAbsent = new List<Ingredient>();
+                ingredientsPresent = new List<Ingredient>();
+                // checkPossibility(((Recipe)cbox_meals.SelectedItem).RecipeName.ToString());
+               
+                checkIfPossible((Recipe)cbox_meals.SelectedItem);
                 lbox_ingredientsRequired.ItemsSource = ((Recipe)cbox_meals.SelectedItem).RequiredIngredients;
-                if (ingredientsNotFound.Count == 0)
+                if (ingredientsAbsent.Count==0)
                 {
-                    tblock_MissingIngredients.Text = "";
+                    tblock_headMissing.Text =string.Empty;
                     tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
-                    lbox_ingredientsRequired.IsEnabled = false;
+                    //lbox_ingredientsRequired.IsEnabled = false;
+                    lbox_MissingIngredients.Visibility = Visibility.Hidden;
+                    btn_addToCart.Visibility = Visibility.Hidden;
+                    lbox_ingredientsRequired.MaxHeight = 150;
                     //MAKE BUTTON AND ENABLE IT!
-
-                    //MessageBox.Show("Possible and you will need ");
-                    //for (int i = 0; i < ingredientsFound.Count; i++)
-                    //{
-                    //    MessageBox.Show(ingredientsFound[i].ToString());
-
-                    //}
 
                 }
                 else
                 {
-                    tblock_MissingIngredients.Text = "";
+                    tblock_headMissing.Text = string.Empty;
                     tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
-                    tblock_MissingIngredients.Foreground = Brushes.Red;
-                    tblock_MissingIngredients.Text = "You will need ";
-                    for (int i = 0; i < ingredientsNotFound.Count; i++)
-                    {
-                        tblock_MissingIngredients.Text = tblock_MissingIngredients.Text + ingredientsNotFound[i] + ", ";
-                    }
-
-                    lbox_ingredientsRequired.IsEnabled = false;
-                    // tblock_MissingIngredients.Text = "You dont have " + String.Concat(ingredientsNotFound);
-                    //MessageBox.Show("Not possible and you will need ");
-                    //String.Concat(ingredientsNotFound);
-
+                    tblock_headMissing.Foreground = Brushes.Red;
+                    tblock_headMissing.Text = "You will need --->";
+                    lbox_ingredientsRequired.MaxHeight = 75;
+                    lbox_MissingIngredients.MaxHeight = 55;
+                    lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
+                    //lbox_MissingIngredients.IsEnabled = false;
+                    lbox_MissingIngredients.Foreground = Brushes.Red;
+                    lbox_MissingIngredients.Visibility = Visibility.Visible;
+                    btn_addToCart.Visibility = Visibility.Visible;
+                    //lbox_ingredientsRequired.IsEnabled = false;
                 }
                 btn_Home.Visibility = Visibility.Visible;
             }
@@ -150,15 +149,68 @@ namespace CookingAI
             
         }
 
+        private void checkIfPossible(Recipe selectedRecipe)
+        {
+            portionSize = int.Parse(tbox_Servings.Text.ToString());
+            Ingredient ingredientToCheck = new Ingredient();
+            Ingredient ingredientTemp;
+            foreach (Ingredient requiredIngredient in selectedRecipe.RequiredIngredients)
+            {
+                ingredientToCheck = App._availableIngredients.SingleOrDefault(i => i.IngredientName.Equals(requiredIngredient.IngredientName));
+                if (!(ingredientToCheck == null))
+                {
+                    if(ingredientToCheck.IngredientQty >= (requiredIngredient.IngredientQty*portionSize))
+                    {
+                        ingredientsPresent.Add(requiredIngredient);
+                    }
+                    else
+                    {
+                        ingredientTemp = new Ingredient();
+                        ingredientTemp.IngredientName = requiredIngredient.IngredientName.ToString();
+                        ingredientTemp.IngredientQty= (requiredIngredient.IngredientQty * portionSize) - ingredientToCheck.IngredientQty;
+                        ingredientTemp.QuantityUnit = requiredIngredient.QuantityUnit;
+
+                        ingredientsAbsent.Add(ingredientTemp);
+                    }
+                    
+                }
+                else
+                {
+                    Recipe rec = App._recipes.SingleOrDefault(r => r.RecipeName.Equals(requiredIngredient.IngredientName));
+                    if(rec==null)
+                    {
+                        ingredientTemp = new Ingredient();
+                        ingredientTemp.IngredientName = requiredIngredient.IngredientName.ToString();
+                        ingredientTemp.IngredientQty = requiredIngredient.IngredientQty * portionSize;
+                        ingredientTemp.QuantityUnit = requiredIngredient.QuantityUnit;
+
+                        ingredientsAbsent.Add(ingredientTemp);
+                    }
+                    else
+                    {
+                        checkIfPossible(rec);
+                    }
+                }
+                
+            }
+
+        }
+
+        /*
+         * 
+         * 
         private void checkPossibility(string selectedRecipeName)
         {
             portionSize = int.Parse(tbox_Servings.Text.ToString());
             Recipe selectedRecipe = App._recipes.SingleOrDefault(r => r.RecipeName.Equals(selectedRecipeName));
             App._availableIngredients = new ObservableCollection<Ingredient>((from i in App._ingredients where i.IngredientQty != 0 select i).ToList());
-            if (selectedRecipe == null || selectedRecipe.RequiredIngredients == null
-                || selectedRecipe.RequiredIngredients.Count == 0)
+            Ingredient ingredientTemp = new Ingredient();
+            int tempQty;
+            if (selectedRecipe == null)
             {   //During a rcursive call this will check if an unavailable ingredient has a recipe or not
                 ingredientsNotFound.Add(selectedRecipeName);
+                //ingredientTemp = App._ingredients.SingleOrDefault(i => i.IngredientName.Equals(selectedRecipeName));
+               // ingredientsNotFoundTemp.Add(ingredientTemp);
             }
             else
             {
@@ -177,9 +229,11 @@ namespace CookingAI
                             if (ingredientRequired.IngredientName == ingredientAvailable.IngredientName && (ingredientRequired.IngredientQty*portionSize) <= ingredientAvailable.IngredientQty && ingredientRequired.QuantityUnit == ingredientAvailable.QuantityUnit)
                             {
                                 ingredientsFound.Add(ingredientAvailable.IngredientName);
+                                ingredientsPresent.Add(ingredientAvailable);
                                 flag = true;
                                 break;
                             }
+                            
                         }
 
                     }
@@ -187,11 +241,17 @@ namespace CookingAI
                     {//Flag = false means the ingredient is not present in available ingredients
                      // now we have to check if this particular ingredient is a recipe itself.
                         checkPossibility(ingredientRequired.IngredientName);
+                        //ingredientTemp = new Ingredient { IngredientName = ingredientRequired.IngredientName, IngredientQty = ingredientRequired.IngredientQty * portionSize, QuantityUnit = ingredientRequired.QuantityUnit };
+                        ingredientTemp.IngredientName = ingredientRequired.IngredientName;
+                        ingredientTemp.IngredientQty = ingredientRequired.IngredientQty * portionSize;
+                        ingredientTemp.QuantityUnit = ingredientRequired.QuantityUnit;
+                        ingredientsAbsent.Add(ingredientTemp);
                     }
                     // MessageBox.Show(ingredientRequired.ingredientId.ToString());
                 }
             }
         }
+        */
 
         private void btn_ManageIngredients_Click(object sender, RoutedEventArgs e)
         {
@@ -206,25 +266,10 @@ namespace CookingAI
             spanel_Home.Visibility = Visibility.Visible;
             spanel_Result.Visibility = Visibility.Hidden;
             tblock_result.Text = string.Empty;
+            initialState = false;
+            tbox_Servings.Text = "1";
             cbox_meals.SelectedIndex = -1;
             btn_Home.Visibility = Visibility.Hidden;
-        }
-
-        private void tbox_Servings_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if(initialState)
-            {
-                Regex check_input = new Regex(@"^[0-9]+$");
-                if (check_input.IsMatch(tbox_Servings.Text))
-                {
-                    btn_Check_Click(sender, e);
-                }
-                else
-                {
-                    MessageBox.Show("Please enter digits for no. of persons/servings");
-                }
-                initialState = true;
-            }
             
         }
 
@@ -237,7 +282,7 @@ namespace CookingAI
             }
             else
             {
-                MessageBox.Show("Please enter only digits for no. of persons/servings");
+                MessageBox.Show("Please enter digits for no. of persons/servings");
             }
         }
 
@@ -252,7 +297,7 @@ namespace CookingAI
 
         private void tbox_resultPortion_GotFocus(object sender, RoutedEventArgs e)
         {
-            //textbox should remain selected so as to not call text changed wen empty..
+            //textbox should remain selected so as to not call text changed when empty..
             tbox_resultPortion.SelectionStart = 0;
             tbox_resultPortion.SelectionLength = tbox_resultPortion.Text.Length;
         }
