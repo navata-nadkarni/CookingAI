@@ -329,7 +329,13 @@ namespace CookingAI
                
             }
             MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
-            MessageBox.Show("Added");
+            MessageBox.Show("Ingredients successfully added to cart");
+        }
+
+        private void btn_ViewCart_Click(object sender, RoutedEventArgs e)
+        {
+            Shopping_Cart sCart = new Shopping_Cart();
+            sCart.ShowDialog();
         }
     }
 }

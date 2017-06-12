@@ -1,22 +1,18 @@
-﻿<Window x:Class="CookingAI.Manage_Ingredients"
+﻿<Window x:Class="CookingAI.Shopping_Cart"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CookingAI"
-        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
-        Title="Manage Ingredients" Height="400" Width="600" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing"
+        Title="Shopping_Cart" Height="400" Width="600">
     <Grid>
-        <Grid.RowDefinitions>
-            <!--<RowDefinition Height="2*"></RowDefinition>-->
-            <RowDefinition Height="1"></RowDefinition>
-            <RowDefinition Height="8*"></RowDefinition>
-        </Grid.RowDefinitions>
+        
         <!--<TextBlock Grid.Row="0" Text="Manage Ingredients" VerticalAlignment="Center" FontSize="18" Margin="10"></TextBlock>-->
-        <GridSplitter Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <StackPanel Name="spanel_AvailableMain" Orientation="Vertical" Grid.Row="1">
-            <TextBlock Text="Available Ingredients" FontSize="16" Margin="10,0,10,0"></TextBlock>
-            <TextBox Name="tbox_Filter" Margin="10,10,10,0" TextChanged="tbox_Filter_TextChanged" GotFocus="tbox_Filter_GotFocus"  Text="Filter For Available Ingredients" Foreground="DarkGray" LostFocus="tbox_Filter_LostFocus" ></TextBox>
+        <!--<GridSplitter Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
+        <StackPanel Name="spanel_CartItemsMain" Orientation="Vertical">
+            <TextBlock Text="Shopping Cart" FontSize="16" Margin="10,0,10,0"></TextBlock>
+            <TextBox Name="tbox_Filter" Margin="10,10,10,0" TextChanged="tbox_Filter_TextChanged" GotFocus="tbox_Filter_GotFocus"  Text="Filter For Cart Items" Foreground="DarkGray" LostFocus="tbox_Filter_LostFocus" ></TextBox>
             <DockPanel Height="250" Margin="10">
                 <ListView Name="lview_Ingredients" MouseDoubleClick="lview_Ingredients_MouseDoubleClick">
                     <ListView.Style>
@@ -36,10 +32,10 @@
                                                              </Style>
                                                         </Button.Style>
                                                     </Button>-->
-                                                    
+
                                                 </StackPanel>
-                                                
-                                                
+
+
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -49,18 +45,19 @@
                     </ListView.Style>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Name="spanel_Available" Orientation="Horizontal">
+                            <StackPanel Name="spanel_CartItems" Orientation="Horizontal">
                                 <TextBlock Width="250" Margin="0,10,10,0" Text="{Binding IngredientName}" IsEnabled="False"></TextBlock>
                                 <TextBlock  Width="50" Margin="0,10,10,0" Text="{Binding IngredientQty}" IsEnabled="False"></TextBlock>
                                 <TextBlock Width="80" Margin="0,10,10,0" Text="{Binding QuantityUnit}" IsEnabled="False"></TextBlock>
                             </StackPanel>
                         </DataTemplate>
-                        
+
                     </ListView.ItemTemplate>
                 </ListView>
             </DockPanel>
             <DockPanel HorizontalAlignment="Right">
-                <Button Name="btn_Add" Width="100" Margin="10" Click="btn_Add_Click" >Add Ingredient</Button>
+                <Button Name="btn_Export" Width="75" Margin="10" FontSize="14" FontWeight="Bold" Content="Export" Click="btn_Export_Click"></Button>
+                <Button Name="btn_Add" Width="120" Margin="10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold">Add Ingredient</Button>
                 <StackPanel>
                     <Popup Name="popup_AddNew" VerticalAlignment="Center" HorizontalAlignment="Center" PlacementTarget="{Binding ElementName=lview_Ingredients}" AllowsTransparency="True" Placement="Center">
                         <Border BorderThickness="2" BorderBrush="black">
@@ -79,15 +76,15 @@
                                     <TextBox Name="tbox_unit" Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding QuantityUnit}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Right">
-                                    <Button Name="btn_Save" Content="Save" Margin="5" Click="btn_Save_Click" ></Button>
-                                    <Button Name="btn_cancel" Content="Cancel" Margin="5" Click="btn_cancel_Click"></Button>
+                                    <Button Name="btn_Save" Content="Save" Margin="5" Click="btn_Save_Click" FontSize="12" FontWeight="Bold"></Button>
+                                    <Button Name="btn_cancel" Content="Cancel" Margin="5" Click="btn_cancel_Click" FontSize="12" FontWeight="Bold"></Button>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
                     </Popup>
                 </StackPanel>
-                <Button Name="btn_Edit" Content="Edit Ingredient" Width="100" Margin="10" Click="btn_Edit_Click"></Button>
-                <Button Name="btn_Remove" Content="Remove Ingredient" Width="120" Margin="10" Click="btn_Remove_Click"></Button>
+                <Button Name="btn_Edit" Content="Edit Ingredient" Width="120" Margin="10" Click="btn_Edit_Click" FontSize="14" FontWeight="Bold"></Button>
+                <Button Name="btn_Remove" Content="Remove Ingredient" Width="140" Margin="10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold"></Button>
             </DockPanel>
         </StackPanel>
     </Grid>

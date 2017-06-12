@@ -60,6 +60,9 @@
     <Compile Include="MultiplyConverter.cs" />
     <Compile Include="MyStorage.cs" />
     <Compile Include="Recipe.cs" />
+    <Compile Include="Shopping_Cart.xaml.cs">
+      <DependentUpon>Shopping_Cart.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -74,6 +77,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Manage_Ingredients.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shopping_Cart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
