@@ -55,9 +55,9 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </DockPanel>
-            <DockPanel HorizontalAlignment="Right">
-                <Button Name="btn_Export" Width="75" Margin="10" FontSize="14" FontWeight="Bold" Content="Export" Click="btn_Export_Click"></Button>
-                <Button Name="btn_Add" Width="120" Margin="10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold">Add Ingredient</Button>
+            <DockPanel HorizontalAlignment="Center">
+                <Button Name="btn_Export" Width="60" Margin="10,10,3,10" FontSize="14" FontWeight="Bold" Content="Export" Click="btn_Export_Click"></Button>
+                <Button Name="btn_Add" Width="120" Margin="3,10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold">Add Ingredient</Button>
                 <StackPanel>
                     <Popup Name="popup_AddNew" VerticalAlignment="Center" HorizontalAlignment="Center" PlacementTarget="{Binding ElementName=lview_Ingredients}" AllowsTransparency="True" Placement="Center">
                         <Border BorderThickness="2" BorderBrush="black">
@@ -83,8 +83,9 @@
                         </Border>
                     </Popup>
                 </StackPanel>
-                <Button Name="btn_Edit" Content="Edit Ingredient" Width="120" Margin="10" Click="btn_Edit_Click" FontSize="14" FontWeight="Bold"></Button>
-                <Button Name="btn_Remove" Content="Remove Ingredient" Width="140" Margin="10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold"></Button>
+                <Button Name="btn_Edit" Content="Edit Ingredient" Width="120" Margin="3,10" Click="btn_Edit_Click" FontSize="14" FontWeight="Bold"></Button>
+                <Button Name="btn_Remove" Content="Remove Ingredient" Width="140" Margin="3,10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold"></Button>
+                <Button Name="btn_Clear" Content="Empty Cart" Margin="3,10,10,10" Width="90" FontSize="14" FontWeight="Bold" Click="btn_Clear_Click" ></Button>
             </DockPanel>
         </StackPanel>
     </Grid>

@@ -32,14 +32,15 @@ namespace CookingAI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            lview_Ingredients.ItemsSource = App._shoppingCart;
-            if (App._shoppingCart == null)
-            {
-                btn_Edit.IsEnabled = false;
-                btn_Remove.IsEnabled = false;
-            }
+            initializeWindow();
+            
+        }
 
-            foreach (Ingredient item in App._ingredients)
+        private void initializeWindow()
+        {
+            setControls();
+            lview_Ingredients.ItemsSource = App._shoppingCart;
+            foreach (Ingredient item in App._allIngredients)
             {
                 _shoppingCartOptions.Add(item);
             }
@@ -49,11 +50,29 @@ namespace CookingAI
             foreach (Ingredient item in App._shoppingCart)
             {
                 Ingredient temp = _shoppingCartOptions.SingleOrDefault(i => i.IngredientName.Equals(item.IngredientName));
-               // Ingredient temp = (Ingredient)from i in _shoppingCartOptions where i.IngredientName == item.IngredientName select i;
+                // Ingredient temp = (Ingredient)from i in _shoppingCartOptions where i.IngredientName == item.IngredientName select i;
                 if (temp != null)
                     _shoppingCartOptions.Remove(temp);
             }
             cbox_AddIngredients.ItemsSource = _shoppingCartOptions;
+        }
+
+        private void setControls()
+        {
+            if (App._shoppingCart.Count == 0)
+            {
+                btn_Edit.IsEnabled = false;
+                btn_Remove.IsEnabled = false;
+                btn_Export.IsEnabled = false;
+                btn_Clear.IsEnabled = false;
+            }
+            else
+            {
+                btn_Edit.IsEnabled = true;
+                btn_Remove.IsEnabled = true;
+                btn_Export.IsEnabled = true;
+                btn_Clear.IsEnabled = true;
+            }
         }
 
         private void cbox_AddIngredients_KeyUp(object sender, KeyEventArgs e)
@@ -71,7 +90,11 @@ namespace CookingAI
         {
             if (lview_Ingredients.SelectedItem != null)
             {
+                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = 0;
+                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
+                _shoppingCartOptions.Add((Ingredient)lview_Ingredients.SelectedItem);
                 App._shoppingCart.Remove((Ingredient)lview_Ingredients.SelectedItem);
+                setControls();
             }
             else
             {
@@ -86,6 +109,7 @@ namespace CookingAI
 
         private void AddIngredients()
         {
+            cbox_AddIngredients.SelectedIndex = -1;
             cbox_AddIngredients.ItemsSource = _shoppingCartOptions;
             cbox_AddIngredients.IsEnabled = true;
             popup_AddNew.IsOpen = true;
@@ -136,7 +160,9 @@ namespace CookingAI
             Ingredient ingredientTemp = App._shoppingCart.SingleOrDefault(sc => sc.IngredientName.Equals(((Ingredient)cbox_AddIngredients.SelectedItem).IngredientName));
             if(ingredientTemp==null)
                 App._shoppingCart.Add((Ingredient)cbox_AddIngredients.SelectedItem);
-            
+
+            _shoppingCartOptions.Remove((Ingredient)cbox_AddIngredients.SelectedItem);
+            setControls();
             popup_AddNew.IsOpen = false;
         }
 
@@ -184,6 +210,13 @@ namespace CookingAI
                 sbObj.Append(item.IngredientName + " - " + item.IngredientQty + " " + item.QuantityUnit + Environment.NewLine);
             }
             return sbObj.ToString();
+        }
+
+        private void btn_Clear_Click(object sender, RoutedEventArgs e)
+        {
+            App._shoppingCart.Clear();
+            initializeWindow();
+
         }
     }
 }
