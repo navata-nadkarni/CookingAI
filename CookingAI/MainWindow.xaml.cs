@@ -132,9 +132,14 @@ namespace CookingAI
                 else
                 {
                    // tblock_headMissing.Text = string.Empty;
-                    tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
-                   // tblock_headMissing.Foreground = Brushes.Red;
-                  //  tblock_headMissing.Text = "You will need --->";
+                   if(ingredientsAbsent.Any(i=>i.IsOptional.Equals(false)))
+                    {
+                        tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
+                    }
+                    else
+                        tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
+                    // tblock_headMissing.Foreground = Brushes.Red;
+                    //  tblock_headMissing.Text = "You will need --->";
                     lbox_ingredientsRequired.MaxHeight = 75;
                     lbox_MissingIngredients.MaxHeight = 55;
                     lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
