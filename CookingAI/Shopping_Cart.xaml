@@ -24,7 +24,7 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ListView">
                                                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center" VerticalAlignment="center">
-                                                    <TextBlock Text="There are no ingredients.Add them." Margin="5"/>
+                                                    <TextBlock Text="There are no ingredients in your cart. Add them" FontSize="14" FontWeight="Bold" Margin="5"/>
                                                     <!--<Button Name="btn_AddIngredients" Content="Add" Margin="5">
                                                         <Button.Style>
                                                             <Style x:Name="buttonStyle">
