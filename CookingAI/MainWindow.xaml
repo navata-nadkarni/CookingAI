@@ -8,6 +8,7 @@
         Title="Cooking With Intellegence" Height="400" Width="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:MultiplyConverter x:Key="MultiplyConverter"/>
+        <local:BoolToColourConverter x:Key="BoolToColorConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -65,13 +66,16 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Name="tblock_headMissing" Margin="10"/>
+                <StackPanel Name="spanel_headMissing" Orientation="Horizontal">
+                    <Rectangle Width="10" Height="10" Stroke="black" Fill="red" Margin="10"></Rectangle>
+                    <TextBlock Text="Ingredients you need" Margin="0,10"></TextBlock>
+                    <Rectangle Width="10" Height="10" Stroke="black" Fill="Goldenrod" Margin="10"></Rectangle>
+                    <TextBlock Text="Ingredients that are  optional" Margin="0,10"></TextBlock>
                 </StackPanel>
                 <ListBox Name="lbox_MissingIngredients" Margin="10">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock>
+                            <TextBlock Foreground="{Binding IsOptional, Converter={StaticResource BoolToColorConverter}}">
                                 <Run Text="{Binding IngredientName}"/>
                                 <Run Text=" - "/>
                                 <Run Text="{Binding IngredientQty}"/>

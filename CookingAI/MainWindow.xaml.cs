@@ -120,7 +120,7 @@ namespace CookingAI
                 lbox_ingredientsRequired.ItemsSource = ((Recipe)cbox_meals.SelectedItem).RequiredIngredients;
                 if (ingredientsAbsent.Count==0)
                 {
-                    tblock_headMissing.Text =string.Empty;
+                  //  tblock_headMissing.Text =string.Empty;
                     tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
                     //lbox_ingredientsRequired.IsEnabled = false;
                     lbox_MissingIngredients.Visibility = Visibility.Hidden;
@@ -131,17 +131,18 @@ namespace CookingAI
                 }
                 else
                 {
-                    tblock_headMissing.Text = string.Empty;
+                   // tblock_headMissing.Text = string.Empty;
                     tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
-                    tblock_headMissing.Foreground = Brushes.Red;
-                    tblock_headMissing.Text = "You will need --->";
+                   // tblock_headMissing.Foreground = Brushes.Red;
+                  //  tblock_headMissing.Text = "You will need --->";
                     lbox_ingredientsRequired.MaxHeight = 75;
                     lbox_MissingIngredients.MaxHeight = 55;
                     lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
                     //lbox_MissingIngredients.IsEnabled = false;
-                    lbox_MissingIngredients.Foreground = Brushes.Red;
+                    spanel_headMissing.Visibility = Visibility.Visible;
                     lbox_MissingIngredients.Visibility = Visibility.Visible;
                     btn_addToCart.Visibility = Visibility.Visible;
+                    
                     //lbox_ingredientsRequired.IsEnabled = false;
                 }
                 btn_Home.Visibility = Visibility.Visible;
@@ -170,7 +171,8 @@ namespace CookingAI
                         ingredientTemp.IngredientName = requiredIngredient.IngredientName.ToString();
                         ingredientTemp.IngredientQty= (requiredIngredient.IngredientQty * portionSize) - ingredientToCheck.IngredientQty;
                         ingredientTemp.QuantityUnit = requiredIngredient.QuantityUnit;
-
+                        ingredientTemp.IsOptional = requiredIngredient.IsOptional;
+                       
                         ingredientsAbsent.Add(ingredientTemp);
                     }
                     
@@ -184,6 +186,7 @@ namespace CookingAI
                         ingredientTemp.IngredientName = requiredIngredient.IngredientName.ToString();
                         ingredientTemp.IngredientQty = requiredIngredient.IngredientQty * portionSize;
                         ingredientTemp.QuantityUnit = requiredIngredient.QuantityUnit;
+                        ingredientTemp.IsOptional = requiredIngredient.IsOptional;
 
                         ingredientsAbsent.Add(ingredientTemp);
                     }
@@ -271,7 +274,9 @@ namespace CookingAI
             tbox_Servings.Text = "1";
             cbox_meals.SelectedIndex = -1;
             btn_Home.Visibility = Visibility.Hidden;
-            
+            btn_addToCart.Visibility = Visibility.Hidden;
+
+
         }
 
         private void checkPortionValue()

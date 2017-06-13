@@ -8,5 +8,6 @@ namespace CookingAI
         public string IngredientName { get; set; }
         public int IngredientQty { get; set; }
         public string QuantityUnit { get; set; }
+        public bool IsOptional { get; set; }
     }
 }
