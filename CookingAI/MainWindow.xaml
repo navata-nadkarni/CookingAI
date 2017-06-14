@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5">
             <TextBlock Text="I would like to make" Margin="10" FontSize="14" FontWeight="Bold"/>
-            <ComboBox Name="cbox_meals" Width="100" IsEditable="true" Margin="10" DisplayMemberPath="RecipeName" MaxDropDownHeight="100" IsTextSearchEnabled="False"></ComboBox>
+            <ComboBox Name="cbox_meals" Width="100" IsEditable="true" Margin="10" DisplayMemberPath="RecipeName" MaxDropDownHeight="100" IsTextSearchEnabled="False" KeyUp="cbox_meals_KeyUp"></ComboBox>
             <TextBlock Text="for" Margin="10" FontSize="14" FontWeight="Bold"/>
             <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10" />
             <TextBlock Text="person(s)." Margin="10,10,0,10" FontSize="14" FontWeight="Bold"></TextBlock>

@@ -92,12 +92,6 @@ namespace CookingAI
 
         }
 
-        private void btn_Edit_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
            MyStorage.storeXML<List<Recipe>>(App._recipes, "recipes.xml");
@@ -346,6 +340,17 @@ namespace CookingAI
         {
             Shopping_Cart sCart = new Shopping_Cart();
             sCart.ShowDialog();
+        }
+
+        private void cbox_meals_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (App._recipes != null)
+            {
+                var elements = (from r in App._recipes where r.RecipeName.StartsWith(cbox_meals.Text, StringComparison.InvariantCultureIgnoreCase) select r).ToList();
+                var elements_contain = (from r in App._recipes where r.RecipeName.ToLower().Contains(cbox_meals.Text.ToLower()) select r).ToList();
+                elements.AddRange(elements_contain);
+                cbox_meals.ItemsSource = elements.Distinct();
+            }
         }
     }
 }
