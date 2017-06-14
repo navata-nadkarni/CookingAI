@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
@@ -20,7 +21,8 @@ namespace CookingAI
          constant and quantity*/
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(values[1].ToString()==string.Empty || values[0].ToString()==string.Empty)
+            Regex check_input = new Regex(@"^[0-9]+$");
+            if (values[1].ToString()==string.Empty || values[0].ToString()==string.Empty || !check_input.IsMatch(values[0].ToString()) || !check_input.IsMatch(values[1].ToString()))
             {
                 return 0;
             }
