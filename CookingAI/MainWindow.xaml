@@ -105,8 +105,6 @@
                 <Button Name="btn_ManageIngredients" Content="Manage Ingredients" FontSize="14" FontWeight="Bold" Grid.Row="2" Width="150" Height="25" Margin="10" Click="btn_ManageIngredients_Click"></Button>
             </StackPanel>
 
-
-
         </Grid>
     </Grid>
 </Window>

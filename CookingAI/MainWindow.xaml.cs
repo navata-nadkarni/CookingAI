@@ -40,7 +40,7 @@ namespace CookingAI
 
         private void AddAvailableIngredients()
         {
-            Recipe rc1 = new Recipe();
+           /* Recipe rc1 = new Recipe();
             rc1.RecipeID = 1;
             rc1.RecipeName = "Schnitzel";
             rc1.RequiredIngredients.Add(new Ingredient { IngredientId = 1, IngredientName = "Eggs", IngredientQty = 2, QuantityUnit = "" });
@@ -76,7 +76,7 @@ namespace CookingAI
             App._ingredients.Add(i3);
             App._ingredients.Add(i4);
             App._ingredients.Add(i5);
-            
+            */
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

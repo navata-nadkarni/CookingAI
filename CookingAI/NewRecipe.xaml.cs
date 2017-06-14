@@ -49,8 +49,10 @@ namespace CookingAI
 
         private void addIngredients()
         {
-            _localIngredients = new List<Ingredient>(App._ingredients);
-            _localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false; i.QuantityUnit = string.Empty; });
+            //_localIngredients = new List<Ingredient>(App._ingredients);
+            //_localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false; i.QuantityUnit = string.Empty; });
+
+            _localIngredients = App._ingredients.Select(i => new Ingredient { IngredientName = i.IngredientName, IngredientQty = 0, QuantityUnit = string.Empty, IsOptional = false }).ToList();
             cbox_AddIngredients.SelectedIndex = -1;
             cbox_AddIngredients.ItemsSource = _localIngredients;
             cbox_AddIngredients.IsEnabled = true;
