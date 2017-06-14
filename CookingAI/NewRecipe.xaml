@@ -1,0 +1,100 @@
+﻿<Window x:Class="CookingAI.NewRecipe"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CookingAI" Loaded="Window_Loaded" Closing="Window_Closing"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="NewRecipe" Height="400" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--<RowDefinition Height="2*"></RowDefinition>-->
+            <RowDefinition Height="1"></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--<TextBlock Grid.Row="0" Text="Manage Ingredients" VerticalAlignment="Center" FontSize="18" Margin="10"></TextBlock>-->
+        <GridSplitter Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <StackPanel Name="spanel_AvailableMain" Orientation="Vertical" Grid.Row="1">
+            <TextBlock Text="New Recipe" FontSize="16" Margin="10,0,10,0"></TextBlock>
+            <TextBox Name="tbox_RecipeName" Margin="10,10,10,0" Text="Enter Recipe Name" Foreground="DarkGray" GotFocus="tbox_RecipeName_GotFocus" KeyUp="tbox_RecipeName_KeyUp" LostFocus="tbox_RecipeName_LostFocus"></TextBox>
+            <DockPanel Height="250" Margin="10">
+                <ListView Name="lview_Ingredients" MouseDoubleClick="lview_Ingredients_MouseDoubleClick">
+                    <ListView.Style>
+                        <Style TargetType="ListView">
+                            <Style.Triggers>
+                                <Trigger Property="HasItems"
+                         Value="False">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListView">
+                                                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center" VerticalAlignment="center">
+                                                    <TextBlock Text="Add the Ingredients to your New Recipe" FontSize="14" FontWeight="Bold" Margin="5"/>
+                                                    <!--<Button Name="btn_AddIngredients" Content="Add" Margin="5">
+                                                        <Button.Style>
+                                                            <Style x:Name="buttonStyle">
+                                                                <EventSetter Event="Click" Handler="btn_AddIngredients_Click"
+                                                             </Style>
+                                                        </Button.Style>
+                                                    </Button>-->
+
+                                                </StackPanel>
+
+
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Style>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Name="spanel_Available" Orientation="Horizontal">
+                                <TextBlock Width="250" Margin="0,10,10,0" Text="{Binding IngredientName}" IsEnabled="False"></TextBlock>
+                                <TextBlock  Width="50" Margin="0,10,10,0" Text="{Binding IngredientQty}" IsEnabled="False"></TextBlock>
+                                <TextBlock Width="80" Margin="0,10,10,0" Text="{Binding QuantityUnit}" IsEnabled="False"></TextBlock>
+                                <CheckBox Margin="0,10,10,0" IsChecked="{Binding IsOptional}" Content="Optional"></CheckBox>
+                            </StackPanel>
+                        </DataTemplate>
+
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Right">
+                <Button Name="btn_SaveRecipe" Width="120" Margin="10" FontSize="14" FontWeight="Bold" Click="btn_SaveRecipe_Click">Save Recipe</Button>
+                <Button Name="btn_Add" Width="120" Margin="10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold">Add Ingredient</Button>
+                <StackPanel>
+                    <Popup Name="popup_AddNew" VerticalAlignment="Center" HorizontalAlignment="Center" PlacementTarget="{Binding ElementName=lview_Ingredients}" AllowsTransparency="True" Placement="Center">
+                        <Border BorderThickness="2" BorderBrush="black">
+                            <StackPanel Name="span_popup"  Orientation="Vertical" Margin="0,0,0,0" Width="300" Background="#FFF0F0F0">
+                                <StackPanel Orientation="Horizontal" Margin="20,15,0,5">
+                                    <TextBlock Text="Select Ingredient" Width="100"></TextBlock>
+                                    <ComboBox Name="cbox_AddIngredients" Width="100" IsEditable="true" IsTextSearchEnabled="False" MaxDropDownHeight="100" DisplayMemberPath="IngredientName" KeyUp="cbox_AddIngredients_KeyUp"></ComboBox>
+           
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
+                                    <TextBlock Text="Enter Quantity" Width="100"></TextBlock>
+                                    <TextBox Name="tbox_qty"  Width="50" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding IngredientQty}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
+                                    <TextBlock Text="Unit for quantity" Width="100"></TextBlock>
+                                    <TextBox Name="tbox_unit" Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding QuantityUnit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
+                                    <TextBlock Text="Is Optional" Width="100"></TextBlock>
+                                    <CheckBox DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" IsChecked="{Binding IsOptional}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Right">
+                                    <Button Name="btn_Save" Content="Save" Margin="5" Click="btn_Save_Click" FontSize="12" FontWeight="Bold" ></Button>
+                                    <Button Name="btn_cancel" Content="Cancel" Margin="5" Click="btn_cancel_Click" FontSize="12" FontWeight="Bold"></Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </StackPanel>
+                <Button Name="btn_Edit" Content="Edit Ingredient" Width="120" Margin="10" FontSize="14" FontWeight="Bold" Click="btn_Edit_Click"></Button>
+                <Button Name="btn_Remove" Content="Remove Ingredient" Width="140" Margin="10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold"></Button>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+</Window>

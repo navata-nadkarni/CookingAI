@@ -18,7 +18,18 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5">
             <TextBlock Text="I would like to make" Margin="10" FontSize="14" FontWeight="Bold"/>
-            <ComboBox Name="cbox_meals" Width="100" IsEditable="true" Margin="10" DisplayMemberPath="RecipeName" MaxDropDownHeight="100" IsTextSearchEnabled="False" KeyUp="cbox_meals_KeyUp"></ComboBox>
+            <ComboBox Name="cbox_meals" Width="100" IsEditable="true" Margin="10" DisplayMemberPath="RecipeName" MaxDropDownHeight="100" IsTextSearchEnabled="False" KeyUp="cbox_meals_KeyUp" SelectionChanged="cbox_meals_SelectionChanged" >
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=RecipeName}" Value="Add new Recipe">
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+
+            </ComboBox>
             <TextBlock Text="for" Margin="10" FontSize="14" FontWeight="Bold"/>
             <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10" />
             <TextBlock Text="person(s)." Margin="10,10,0,10" FontSize="14" FontWeight="Bold"></TextBlock>

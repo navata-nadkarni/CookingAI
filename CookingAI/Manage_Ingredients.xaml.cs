@@ -33,10 +33,11 @@ namespace CookingAI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-           // _recipes = MyStorage.readXML<List<Recipe>>("recipes.xml");
+            // _recipes = MyStorage.readXML<List<Recipe>>("recipes.xml");
             //_ingredients = MyStorage.readXML<ObservableCollection<Ingredient>>("ingredients.xml");
             //var availableIngredients = from i in _ingredients where i.IngredientQty != 0 select i;
             //_availableIngredients = new ObservableCollection<Ingredient>((from i in _ingredients where i.IngredientQty != 0 select i).ToList());
+            Owner.Hide();
             lview_Ingredients.ItemsSource = App._availableIngredients;
             if (App._availableIngredients==null)
             {
@@ -104,6 +105,7 @@ namespace CookingAI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MyStorage.storeXML<ObservableCollection<Ingredient>>(App._ingredients, "ingredients.xml");
+            Owner.Show();
         }
 
         private void tbox_Filter_TextChanged(object sender, TextChangedEventArgs e)

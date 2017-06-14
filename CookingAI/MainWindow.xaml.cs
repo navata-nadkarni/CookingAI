@@ -83,13 +83,21 @@ namespace CookingAI
         {
             //_recipes = MyStorage.readXML<List<Recipe>>("recipes.xml");
             //_ingredients = MyStorage.readXML<ObservableCollection<Ingredient>>("ingredients.xml");
-            cbox_meals.ItemsSource = App._recipes;
-            tbox_Servings.Text = "1";
+            initializeWindow();
+            
             //App._shoppingCart = new ObservableCollection<Ingredient>();
             //var availableIngredients = from i in _ingredients where i.IngredientQty !=0 select i;
             //_available = new ObservableCollection<Ingredient>((from i in _ingredients where i.IngredientQty != 0 select i).ToList());
             //lview_Ingredients.ItemsSource = availableIngredients;
 
+        }
+
+        private void initializeWindow()
+        {
+            List<Recipe> recipeItemSource = new List<Recipe>(App._recipes);
+            recipeItemSource.Add(new Recipe { RecipeName = "Add new Recipe" });
+            cbox_meals.ItemsSource = recipeItemSource;
+            tbox_Servings.Text = "1";
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -262,6 +270,7 @@ namespace CookingAI
             manageIngredients.Owner = this;
             //this.Visibility = Visibility.Hidden;
             manageIngredients.ShowDialog();
+            initializeWindow();
         }
 
         private void btn_Home_Click(object sender, RoutedEventArgs e)
@@ -297,7 +306,7 @@ namespace CookingAI
             {
                 checkPortionValue();
             }
-            initialState = true;
+            
         }
 
         private void tbox_resultPortion_GotFocus(object sender, RoutedEventArgs e)
@@ -339,7 +348,9 @@ namespace CookingAI
         private void btn_ViewCart_Click(object sender, RoutedEventArgs e)
         {
             Shopping_Cart sCart = new Shopping_Cart();
+            sCart.Owner = this;
             sCart.ShowDialog();
+            initializeWindow();
         }
 
         private void cbox_meals_KeyUp(object sender, KeyEventArgs e)
@@ -351,6 +362,22 @@ namespace CookingAI
                 elements.AddRange(elements_contain);
                 cbox_meals.ItemsSource = elements.Distinct();
             }
+        }
+
+        private void cbox_meals_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbox_meals.SelectedItem != null)
+            {
+                NewRecipe newRecipe = new NewRecipe();
+                newRecipe.Owner = this;
+                if (((Recipe)cbox_meals.SelectedItem).RecipeName == "Add new Recipe")
+                {
+                    newRecipe.ShowDialog();
+                    initializeWindow();
+                   
+                } 
+            }
+            
         }
     }
 }

@@ -32,6 +32,7 @@ namespace CookingAI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Owner.Hide();
             initializeWindow();
             
         }
@@ -189,6 +190,7 @@ namespace CookingAI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
+            Owner.Show();
         }
 
         private void btn_Export_Click(object sender, RoutedEventArgs e)
