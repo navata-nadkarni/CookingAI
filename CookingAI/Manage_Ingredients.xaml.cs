@@ -188,7 +188,11 @@ namespace CookingAI
 
         private void lview_Ingredients_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Edit_Ingredient();
+            if (e.OriginalSource is TextBlock || e.OriginalSource is StackPanel || e.OriginalSource is Border)
+            {
+                Edit_Ingredient();
+            }
+            
         }
 
         private void tbox_Filter_LostFocus(object sender, RoutedEventArgs e)

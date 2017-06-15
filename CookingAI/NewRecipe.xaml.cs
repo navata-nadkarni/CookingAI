@@ -133,7 +133,11 @@ namespace CookingAI
 
         private void lview_Ingredients_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            editIngredients();
+            if (e.OriginalSource is TextBlock || e.OriginalSource is StackPanel || e.OriginalSource is Border)
+            {
+                editIngredients();
+            }
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

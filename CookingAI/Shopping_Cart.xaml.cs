@@ -190,7 +190,10 @@ namespace CookingAI
 
         private void lview_Ingredients_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Edit_Ingredient();
+            if (e.OriginalSource is TextBlock || e.OriginalSource is StackPanel || e.OriginalSource is Border)
+            {
+                Edit_Ingredient();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
