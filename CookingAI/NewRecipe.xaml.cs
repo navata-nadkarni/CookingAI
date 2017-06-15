@@ -61,12 +61,18 @@ namespace CookingAI
 
         private void cbox_AddIngredients_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.Key==Key.Back || e.Key== Key.Delete)
+            {
+                cbox_AddIngredients.SelectedIndex = -1;
+                //cbox_AddIngredients.IsDropDownOpen = false;
+            }
             if (_localIngredients != null)
             {
                 var elements = (from i in _localIngredients where i.IngredientName.StartsWith(cbox_AddIngredients.Text, StringComparison.InvariantCultureIgnoreCase) select i).ToList();
                 var elements_contain = (from i in _localIngredients where i.IngredientName.ToLower().Contains(cbox_AddIngredients.Text.ToLower()) select i).ToList();
                 elements.AddRange(elements_contain);
                 cbox_AddIngredients.ItemsSource = elements.Distinct();
+                cbox_AddIngredients.IsDropDownOpen = true;
             }
         }
 

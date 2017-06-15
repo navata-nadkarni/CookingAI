@@ -32,7 +32,7 @@ namespace CookingAI
         List<Ingredient> ingredientsPresent = new List<Ingredient>();
         int portionSize;
         Boolean initialState = false;
-
+        List<Recipe> recipeItemSource;
         public MainWindow()
         {
             InitializeComponent();
@@ -95,7 +95,7 @@ namespace CookingAI
 
         private void initializeWindow()
         {
-            List<Recipe> recipeItemSource = new List<Recipe>(App._recipes);
+            recipeItemSource = new List<Recipe>(App._recipes);
             recipeItemSource.Add(new Recipe { RecipeName = "Add new Recipe" });
             cbox_meals.ItemsSource = recipeItemSource;
             tbox_Servings.Text = "1";
@@ -373,6 +373,7 @@ namespace CookingAI
                 var elements = (from r in App._recipes where r.RecipeName.StartsWith(cbox_meals.Text, StringComparison.InvariantCultureIgnoreCase) select r).ToList();
                 var elements_contain = (from r in App._recipes where r.RecipeName.ToLower().Contains(cbox_meals.Text.ToLower()) select r).ToList();
                 elements.AddRange(elements_contain);
+                elements.Add(new Recipe { RecipeName = "Add new Recipe" });
                 cbox_meals.ItemsSource = elements.Distinct();
                 cbox_meals.IsDropDownOpen = true;
 
