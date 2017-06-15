@@ -31,7 +31,7 @@ namespace CookingAI
         List<Ingredient> ingredientsAbsent=new List<Ingredient>();
         List<Ingredient> ingredientsPresent = new List<Ingredient>();
         int portionSize;
-        Boolean initialState = false;
+        //Boolean initialState = false;
         List<Recipe> recipeItemSource;
         public MainWindow()
         {
@@ -113,61 +113,66 @@ namespace CookingAI
 
         private void btn_Check_Click(object sender, RoutedEventArgs e)
         {
-            initialState = true;
-            if(cbox_meals.SelectedIndex!=-1 && tbox_Servings.Text!=string.Empty)
-            {
-                spanel_Home.Visibility = Visibility.Hidden;
-                spanel_Result.Visibility = Visibility.Visible;
-                ingredientsAbsent = new List<Ingredient>();
-                ingredientsPresent = new List<Ingredient>();
-                // checkPossibility(((Recipe)cbox_meals.SelectedItem).RecipeName.ToString());
-               
-                checkIfPossible((Recipe)cbox_meals.SelectedItem);
-                lbox_ingredientsRequired.ItemsSource = ((Recipe)cbox_meals.SelectedItem).RequiredIngredients;
-                if (ingredientsAbsent.Count==0)
+            
+                //initialState = true;
+                if (cbox_meals.SelectedIndex != -1 && tbox_Servings.Text != string.Empty)
                 {
-                  //  tblock_headMissing.Text =string.Empty;
-                    tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
-                    //lbox_ingredientsRequired.IsEnabled = false;
-                    lbox_MissingIngredients.Visibility = Visibility.Hidden;
-                    btn_addToCart.Visibility = Visibility.Hidden;
-                    lbox_ingredientsRequired.MaxHeight = 150;
-                    btn_updateRec.Visibility = Visibility.Visible;
-                    spanel_headMissing.Visibility = Visibility.Hidden;
-                    //MAKE BUTTON AND ENABLE IT!
+                    spanel_Home.Visibility = Visibility.Hidden;
+                    spanel_Result.Visibility = Visibility.Visible;
+                    ingredientsAbsent = new List<Ingredient>();
+                    ingredientsPresent = new List<Ingredient>();
+                    // checkPossibility(((Recipe)cbox_meals.SelectedItem).RecipeName.ToString());
 
-                }
-                else
-                {
-                   // tblock_headMissing.Text = string.Empty;
-                   if(ingredientsAbsent.Any(i=>i.IsOptional.Equals(false)))
+                    checkIfPossible((Recipe)cbox_meals.SelectedItem);
+                    lbox_ingredientsRequired.ItemsSource = ((Recipe)cbox_meals.SelectedItem).RequiredIngredients;
+                    if (ingredientsAbsent.Count == 0)
                     {
-                        tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
-                        btn_updateRec.Visibility = Visibility.Hidden;
+                        //  tblock_headMissing.Text =string.Empty;
+                        tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
+                        //lbox_ingredientsRequired.IsEnabled = false;
+                        lbox_MissingIngredients.Visibility = Visibility.Hidden;
+                        btn_addToCart.Visibility = Visibility.Hidden;
+                        lbox_ingredientsRequired.MaxHeight = 150;
+                        btn_updateRec.Visibility = Visibility.Visible;
+                        spanel_headMissing.Visibility = Visibility.Hidden;
+                        //MAKE BUTTON AND ENABLE IT!
 
                     }
                     else
                     {
-                        tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
-                        btn_updateRec.Visibility = Visibility.Visible;
-                    }
-                    spanel_headMissing.Visibility = Visibility.Visible;
+                        // tblock_headMissing.Text = string.Empty;
+                        if (ingredientsAbsent.Any(i => i.IsOptional.Equals(false)))
+                        {
+                            tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
+                            btn_updateRec.Visibility = Visibility.Hidden;
 
-                    // tblock_headMissing.Foreground = Brushes.Red;
-                    //  tblock_headMissing.Text = "You will need --->";
-                    lbox_ingredientsRequired.MaxHeight = 75;
-                    lbox_MissingIngredients.MaxHeight = 40;
-                    lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
-                    //lbox_MissingIngredients.IsEnabled = false;
-                    spanel_headMissing.Visibility = Visibility.Visible;
-                    lbox_MissingIngredients.Visibility = Visibility.Visible;
-                    btn_addToCart.Visibility = Visibility.Visible;
-                    
-                    //lbox_ingredientsRequired.IsEnabled = false;
+                        }
+                        else
+                        {
+                            tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
+                            btn_updateRec.Visibility = Visibility.Visible;
+                        }
+                        spanel_headMissing.Visibility = Visibility.Visible;
+
+                        // tblock_headMissing.Foreground = Brushes.Red;
+                        //  tblock_headMissing.Text = "You will need --->";
+                        lbox_ingredientsRequired.MaxHeight = 75;
+                        lbox_MissingIngredients.MaxHeight = 40;
+                        lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
+                        //lbox_MissingIngredients.IsEnabled = false;
+                        spanel_headMissing.Visibility = Visibility.Visible;
+                        lbox_MissingIngredients.Visibility = Visibility.Visible;
+                        btn_addToCart.Visibility = Visibility.Visible;
+
+                        //lbox_ingredientsRequired.IsEnabled = false;
+                    }
+                    btn_Home.Visibility = Visibility.Visible;
                 }
-                btn_Home.Visibility = Visibility.Visible;
-            }
-            //tblock_result.Visibility = Visibility.Visible;
+                //tblock_result.Visibility = Visibility.Visible; 
+                else
+                {
+                    MessageBox.Show("Please enter meal details");
+                }
             
         }
 
@@ -283,6 +288,8 @@ namespace CookingAI
             manageIngredients.Owner = this;
             //this.Visibility = Visibility.Hidden;
             manageIngredients.ShowDialog();
+            btn_updateRec.Visibility = Visibility.Hidden;
+            btn_addToCart.Visibility = Visibility.Hidden;
             initializeWindow();
         }
 
@@ -291,7 +298,7 @@ namespace CookingAI
             spanel_Home.Visibility = Visibility.Visible;
             spanel_Result.Visibility = Visibility.Hidden;
             tblock_result.Text = string.Empty;
-            initialState = false;
+            //initialState = false;
             tbox_Servings.Text = "1";
             cbox_meals.SelectedIndex = -1;
             btn_Home.Visibility = Visibility.Hidden;
@@ -315,7 +322,7 @@ namespace CookingAI
 
         private void tbox_resultPortion_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(initialState)
+            if(spanel_Home.Visibility!=Visibility.Visible)
             {
                 checkPortionValue();
             }
