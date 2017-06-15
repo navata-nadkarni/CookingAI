@@ -50,10 +50,10 @@ namespace CookingAI
         private void addIngredients()
         {
             //_localIngredients = new List<Ingredient>(App._ingredients);
-            //_localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false; i.QuantityUnit = string.Empty; });
 
-            _localIngredients = App._ingredients.Select(i => new Ingredient { IngredientName = i.IngredientName, IngredientQty = 0, QuantityUnit = string.Empty, IsOptional = false }).ToList();
+            _localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false; i.QuantityUnit = string.Empty; });
             cbox_AddIngredients.SelectedIndex = -1;
+            cbox_AddIngredients.ItemsSource = null;
             cbox_AddIngredients.ItemsSource = _localIngredients;
             cbox_AddIngredients.IsEnabled = true;
             popup_AddNew.IsOpen = true;
@@ -78,12 +78,16 @@ namespace CookingAI
 
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
-            
-            Ingredient ingredientTemp = App._ingredients.SingleOrDefault(sc => sc.IngredientName.Equals(((Ingredient)cbox_AddIngredients.SelectedItem).IngredientName));
-            if (ingredientTemp == null)
-                App._ingredients.Add((Ingredient)cbox_AddIngredients.SelectedItem);
 
-            _recipeIngredients.Add((Ingredient)cbox_AddIngredients.SelectedItem);
+            Ingredient ingredientTemp =_recipeIngredients.SingleOrDefault(sc => sc.IngredientName.Equals(((Ingredient)cbox_AddIngredients.SelectedItem).IngredientName));
+            if (ingredientTemp == null)
+            {
+                _recipeIngredients.Add((Ingredient)cbox_AddIngredients.SelectedItem);
+            }
+            
+            //    App._ingredients.Add((Ingredient)cbox_AddIngredients.SelectedItem);
+
+            _localIngredients.Remove((Ingredient)cbox_AddIngredients.SelectedItem);
             popup_AddNew.IsOpen = false;
             setControls();
         }
@@ -136,6 +140,7 @@ namespace CookingAI
         {
             Owner.Hide();
             setControls();
+            _localIngredients = App._ingredients.Select(i => new Ingredient { IngredientName = i.IngredientName, IngredientQty = 0, QuantityUnit = string.Empty, IsOptional = false }).ToList();
             lview_Ingredients.ItemsSource = _recipeIngredients;
         }
 
