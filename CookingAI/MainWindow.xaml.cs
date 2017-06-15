@@ -99,6 +99,8 @@ namespace CookingAI
             recipeItemSource.Add(new Recipe { RecipeName = "Add new Recipe" });
             cbox_meals.ItemsSource = recipeItemSource;
             tbox_Servings.Text = "1";
+            spanel_Home.Visibility = Visibility.Visible;
+            spanel_Result.Visibility = Visibility.Hidden;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -130,6 +132,7 @@ namespace CookingAI
                     btn_addToCart.Visibility = Visibility.Hidden;
                     lbox_ingredientsRequired.MaxHeight = 150;
                     btn_updateRec.Visibility = Visibility.Visible;
+                    spanel_headMissing.Visibility = Visibility.Hidden;
                     //MAKE BUTTON AND ENABLE IT!
 
                 }
@@ -140,13 +143,15 @@ namespace CookingAI
                     {
                         tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
                         btn_updateRec.Visibility = Visibility.Hidden;
+
                     }
                     else
                     {
                         tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
                         btn_updateRec.Visibility = Visibility.Visible;
                     }
-                        
+                    spanel_headMissing.Visibility = Visibility.Visible;
+
                     // tblock_headMissing.Foreground = Brushes.Red;
                     //  tblock_headMissing.Text = "You will need --->";
                     lbox_ingredientsRequired.MaxHeight = 75;
@@ -350,6 +355,7 @@ namespace CookingAI
             }
             MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
             MessageBox.Show("Ingredients successfully added to cart");
+           // initializeWindow();
         }
 
         private void btn_ViewCart_Click(object sender, RoutedEventArgs e)
@@ -357,7 +363,7 @@ namespace CookingAI
             Shopping_Cart sCart = new Shopping_Cart();
             sCart.Owner = this;
             sCart.ShowDialog();
-            initializeWindow();
+           // initializeWindow();
         }
 
         private void cbox_meals_KeyUp(object sender, KeyEventArgs e)
@@ -409,9 +415,12 @@ namespace CookingAI
                     if (temp.IngredientQty == 0)
                         temp.QuantityUnit = string.Empty;
                 }
-                    
-
+                   
             }
+            App.refreshData();
+            MessageBox.Show("Your available ingredients have been updated");
+            cbox_meals.SelectedIndex = -1;
+            initializeWindow();
         }
     }
 }
