@@ -35,7 +35,7 @@ namespace CookingAI
 
         private void tbox_RecipeName_KeyUp(object sender, KeyEventArgs e)
         {
-            if(App._recipes.Any(i=>i.RecipeName.Equals(tbox_RecipeName.Text)))
+            if(App._recipes.Any(i=>i.RecipeName.ToLower().Equals(tbox_RecipeName.Text.ToLower())))
             {
                 MessageBox.Show("This recipe already exists in our database");
             }
