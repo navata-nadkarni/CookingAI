@@ -32,6 +32,7 @@ namespace CookingAI
         List<Ingredient> ingredientsPresent = new List<Ingredient>();
         int portionSize;
         Boolean initialState = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -109,7 +110,7 @@ namespace CookingAI
 
         private void btn_Check_Click(object sender, RoutedEventArgs e)
         {
-
+            initialState = true;
             if(cbox_meals.SelectedIndex!=-1 && tbox_Servings.Text!=string.Empty)
             {
                 spanel_Home.Visibility = Visibility.Hidden;
@@ -128,6 +129,7 @@ namespace CookingAI
                     lbox_MissingIngredients.Visibility = Visibility.Hidden;
                     btn_addToCart.Visibility = Visibility.Hidden;
                     lbox_ingredientsRequired.MaxHeight = 150;
+                    btn_updateRec.Visibility = Visibility.Visible;
                     //MAKE BUTTON AND ENABLE IT!
 
                 }
@@ -137,13 +139,18 @@ namespace CookingAI
                    if(ingredientsAbsent.Any(i=>i.IsOptional.Equals(false)))
                     {
                         tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
+                        btn_updateRec.Visibility = Visibility.Hidden;
                     }
                     else
+                    {
                         tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
+                        btn_updateRec.Visibility = Visibility.Visible;
+                    }
+                        
                     // tblock_headMissing.Foreground = Brushes.Red;
                     //  tblock_headMissing.Text = "You will need --->";
                     lbox_ingredientsRequired.MaxHeight = 75;
-                    lbox_MissingIngredients.MaxHeight = 55;
+                    lbox_MissingIngredients.MaxHeight = 40;
                     lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
                     //lbox_MissingIngredients.IsEnabled = false;
                     spanel_headMissing.Visibility = Visibility.Visible;
@@ -355,29 +362,55 @@ namespace CookingAI
 
         private void cbox_meals_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Back || e.Key == Key.Delete)
+            {
+                cbox_meals.SelectedIndex = -1;
+                cbox_meals.IsDropDownOpen = false;
+            }
+
             if (App._recipes != null)
             {
                 var elements = (from r in App._recipes where r.RecipeName.StartsWith(cbox_meals.Text, StringComparison.InvariantCultureIgnoreCase) select r).ToList();
                 var elements_contain = (from r in App._recipes where r.RecipeName.ToLower().Contains(cbox_meals.Text.ToLower()) select r).ToList();
                 elements.AddRange(elements_contain);
                 cbox_meals.ItemsSource = elements.Distinct();
+                cbox_meals.IsDropDownOpen = true;
+
             }
+           
         }
 
         private void cbox_meals_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cbox_meals.SelectedItem != null)
             {
-                NewRecipe newRecipe = new NewRecipe();
-                newRecipe.Owner = this;
+                
                 if (((Recipe)cbox_meals.SelectedItem).RecipeName == "Add new Recipe")
                 {
+                    NewRecipe newRecipe = new NewRecipe();
+                    newRecipe.Owner = this;
                     newRecipe.ShowDialog();
                     initializeWindow();
                    
                 } 
             }
             
+        }
+
+        private void btn_updateRec_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Ingredient item in ingredientsPresent)
+            {
+                Ingredient temp = App._availableIngredients.SingleOrDefault(i => i.IngredientName.Equals(item.IngredientName));
+                if (temp != null)
+                {
+                    temp.IngredientQty = temp.IngredientQty - item.IngredientQty;
+                    if (temp.IngredientQty == 0)
+                        temp.QuantityUnit = string.Empty;
+                }
+                    
+
+            }
         }
     }
 }

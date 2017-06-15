@@ -12,40 +12,52 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="70*"/>
             <RowDefinition Height="5"/>
             <RowDefinition Height="237*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5">
-            <TextBlock Text="I would like to make" Margin="10" FontSize="14" FontWeight="Bold"/>
-            <ComboBox Name="cbox_meals" Width="100" IsEditable="true" Margin="10" DisplayMemberPath="RecipeName" MaxDropDownHeight="100" IsTextSearchEnabled="False" KeyUp="cbox_meals_KeyUp" SelectionChanged="cbox_meals_SelectionChanged" >
-                <ComboBox.ItemContainerStyle>
-                    <Style TargetType="ComboBoxItem">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=RecipeName}" Value="Add new Recipe">
-                                <Setter Property="FontWeight" Value="Bold" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ComboBox.ItemContainerStyle>
+        <Viewbox Grid.Row="0" MaxHeight="100">
 
-            </ComboBox>
-            <TextBlock Text="for" Margin="10" FontSize="14" FontWeight="Bold"/>
-            <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10" />
-            <TextBlock Text="person(s)." Margin="10,10,0,10" FontSize="14" FontWeight="Bold"></TextBlock>
-            <Button Name="btn_Check" Margin="10" Width="100" Content="Is it Possible?" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Click="btn_Check_Click"/>
-        </StackPanel>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                <TextBlock Text="I would like to make" Margin="10" FontSize="14" FontWeight="Bold"/>
+                <ComboBox Name="cbox_meals" Width="100" IsEditable="true" Margin="10" DisplayMemberPath="RecipeName" MaxDropDownHeight="100" IsTextSearchEnabled="False" KeyUp="cbox_meals_KeyUp" SelectionChanged="cbox_meals_SelectionChanged">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=RecipeName}" Value="Add new Recipe">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
 
+                </ComboBox>
+                <TextBlock Text="for" Margin="10" FontSize="14" FontWeight="Bold"/>
+                <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10" />
+                <TextBlock Text="person(s)." Margin="10,10,0,10" FontSize="14" FontWeight="Bold"></TextBlock>
+                <Button Name="btn_Check" Margin="10" Width="120" Content="Is it Possible?" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Click="btn_Check_Click"/>
+            </StackPanel>
+        </Viewbox>
         <GridSplitter Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <!--<RowDefinition Height="40*"/>-->
                 <RowDefinition Height="182*"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="50*"/>
             </Grid.RowDefinitions>
-            <StackPanel Name="spanel_Home" Orientation="Horizontal" Grid.Row="0">
-                <TextBlock Margin="10" TextWrapping="Wrap" Width="250" VerticalAlignment="Center" HorizontalAlignment="Center">This is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not</TextBlock>
-                <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\medit_diet-768x403.jpg" Width="325" Margin="10"></Image>
+            <StackPanel Name="spanel_Home" Grid.Row="0" VerticalAlignment="Center" Visibility="Visible">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="50*"/>
+                    </Grid.ColumnDefinitions>
+                    <Viewbox Grid.Column="0">
+                        <TextBlock Margin="10" TextWrapping="Wrap" Width="300" MaxHeight="500" FontSize="13">This is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not</TextBlock>
+                    </Viewbox>
+                    <DockPanel Grid.Column="1">
+                        <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\medit_diet-768x403.jpg" MinWidth="325"  Margin="15"/>
+                    </DockPanel>
+                </Grid>
             </StackPanel>
             <StackPanel Name="spanel_Result"  Orientation="Vertical" Grid.Row="0" Visibility="Hidden">
                 <StackPanel Name="spanel_resultText" Orientation="Horizontal">
@@ -57,7 +69,11 @@
 
                     </StackPanel>
                 </StackPanel>
-                <ListBox Name="lbox_ingredientsRequired" Margin="10">
+
+                <Viewbox>
+                    
+                </Viewbox>
+                <ListBox Name="lbox_ingredientsRequired" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <!--<CheckBox Name="{Binding IngredientName}"></CheckBox>-->
@@ -77,13 +93,14 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <StackPanel Name="spanel_headMissing" Orientation="Horizontal">
-                    <Rectangle Width="10" Height="10" Stroke="black" Fill="red" Margin="10"></Rectangle>
-                    <TextBlock Text="Ingredients you need" Margin="0,10"></TextBlock>
-                    <Rectangle Width="10" Height="10" Stroke="black" Fill="Goldenrod" Margin="10"></Rectangle>
-                    <TextBlock Text="Ingredients that are  optional" Margin="0,10"></TextBlock>
+                
+                <StackPanel Name="spanel_headMissing" Orientation="Horizontal" Margin="10,5">
+                    <Rectangle Width="10" Height="10" Stroke="black" Fill="red" Margin="5,0"></Rectangle>
+                    <TextBlock Text="Ingredients you need" Margin="5,0"></TextBlock>
+                    <Rectangle Width="10" Height="10" Stroke="black" Fill="Goldenrod" Margin="5,0"></Rectangle>
+                    <TextBlock Text="Ingredients that are  optional" Margin="5,0"></TextBlock>
                 </StackPanel>
-                <ListBox Name="lbox_MissingIngredients" Margin="10">
+                <ListBox Name="lbox_MissingIngredients" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Foreground="{Binding IsOptional, Converter={StaticResource BoolToColorConverter}}">
@@ -96,15 +113,21 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </StackPanel>
-            <Button Name="btn_Home" Margin="10" Grid.Row="2" HorizontalAlignment="Left" Visibility="Hidden" Click="btn_Home_Click" >
-                <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\home.JPG"  ></Image>
-            </Button>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Name="btn_addToCart" Content="Add to cart" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Width="100" Click="btn_addToCart_Click" ></Button>
-                <Button Name="btn_ViewCart" Content="Go to Cart" FontSize="14" FontWeight="Bold" Margin="10" Width="100" Click="btn_ViewCart_Click"></Button>
-                <Button Name="btn_ManageIngredients" Content="Manage Ingredients" FontSize="14" FontWeight="Bold" Grid.Row="2" Width="150" Height="25" Margin="10" Click="btn_ManageIngredients_Click"></Button>
-            </StackPanel>
-
+            
+            
+            <Viewbox Grid.Row="2" MaxHeight="100" HorizontalAlignment="Left" Margin="10">
+                <Button Name="btn_Home" Margin="10" Grid.Row="2" HorizontalAlignment="Left" Visibility="Hidden" Click="btn_Home_Click" BorderBrush="White">
+                    <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\home.JPG"></Image>
+                </Button>
+            </Viewbox>
+            <Viewbox Grid.Row="2" MaxHeight="100" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
+                    <Button Name="btn_updateRec" Content="Update Ingredients" Width="150" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Click="btn_updateRec_Click"></Button>
+                    <Button Name="btn_addToCart" Content="Add to cart" Width="100" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Click="btn_addToCart_Click" />
+                    <Button Name="btn_ViewCart" Content="Go to Cart" FontSize="14" FontWeight="Bold" Margin="10" Width="100" Click="btn_ViewCart_Click"/>
+                    <Button Name="btn_ManageIngredients" Content="Manage Ingredients" FontSize="14" FontWeight="Bold" Grid.Row="2" Width="150" Height="25" Margin="10" Click="btn_ManageIngredients_Click"/>
+                </StackPanel>
+            </Viewbox>
         </Grid>
     </Grid>
 </Window>
