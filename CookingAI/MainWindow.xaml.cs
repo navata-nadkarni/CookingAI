@@ -101,6 +101,7 @@ namespace CookingAI
             tbox_Servings.Text = "1";
             spanel_Home.Visibility = Visibility.Visible;
             spanel_Result.Visibility = Visibility.Hidden;
+            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -391,7 +392,10 @@ namespace CookingAI
         {
             if (cbox_meals.SelectedItem != null)
             {
-                
+                spanel_Home.Visibility = Visibility.Visible;
+                spanel_Result.Visibility = Visibility.Hidden;
+                btn_addToCart.Visibility = Visibility.Hidden;
+                btn_updateRec.Visibility = Visibility.Hidden;
                 if (((Recipe)cbox_meals.SelectedItem).RecipeName == "Add new Recipe")
                 {
                     NewRecipe newRecipe = new NewRecipe();
