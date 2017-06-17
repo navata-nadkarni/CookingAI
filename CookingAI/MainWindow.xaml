@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CookingAI"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
-        Title="Cooking With Intellegence" Height="400" Width="600" WindowStartupLocation="CenterScreen">
+        Title="Cooking With Intelligence" Height="400" Width="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:MultiplyConverter x:Key="MultiplyConverter"/>
         <local:BoolToColourConverter x:Key="BoolToColorConverter"/>
@@ -46,7 +46,7 @@
                 <RowDefinition Height="182*"/>
                 <RowDefinition Height="50*"/>
             </Grid.RowDefinitions>
-            <StackPanel Name="spanel_Home" Grid.Row="0" VerticalAlignment="Center" Visibility="Visible">
+            <StackPanel Name="spanel_Home" Grid.Row="0" VerticalAlignment="Center" Visibility="Hidden">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50*"/>
@@ -60,20 +60,27 @@
                     </DockPanel>
                 </Grid>
             </StackPanel>
-            <StackPanel Name="spanel_Result"  Orientation="Vertical" Grid.Row="0" Visibility="Hidden">
-                <StackPanel Name="spanel_resultText" Orientation="Horizontal">
-                    <TextBlock Name="tblock_result" Margin="10" VerticalAlignment="Center" FontSize="14"></TextBlock>
-                    <StackPanel Name="spanel_portionStack" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Name="tbox_resultPortion" Margin="10" Width="50" HorizontalContentAlignment="Center" Text="{Binding ElementName=tbox_Servings,Path=Text}"  TextChanged="tbox_resultPortion_TextChanged" GotFocus="tbox_resultPortion_GotFocus" ></TextBox>
-                        <TextBlock Text="person(s)." FontSize="14" VerticalAlignment="Center"></TextBlock>
-                    </StackPanel>
-                </StackPanel>
-                <TextBlock Text="Ingredients required for the selected recipe" Margin="10,0" FontSize="14"></TextBlock>
-                <ListBox Name="lbox_ingredientsRequired" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <!--<CheckBox Name="{Binding IngredientName}"></CheckBox>-->
-                            <TextBlock>
+            <Grid Name="spanel_Result" Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="50*"/>
+                </Grid.RowDefinitions>
+                <DockPanel Name="spanel_resultText" Grid.Row="0" LastChildFill="False">
+                    <!--<StackPanel Name="spanel_resultText" Orientation="Horizontal">-->
+                    
+                        <DockPanel DockPanel.Dock="Top">
+                            <TextBlock Name="tblock_result" Margin="10,5,5,5" VerticalAlignment="Center" FontSize="14"></TextBlock>
+                            <StackPanel Name="spanel_portionStack" Orientation="Horizontal" DockPanel.Dock="Left">
+                                <TextBox Name="tbox_resultPortion" Margin="0,5,5,5" Width="50" HorizontalContentAlignment="Center" Text="{Binding ElementName=tbox_Servings,Path=Text}"  TextChanged="tbox_resultPortion_TextChanged" GotFocus="tbox_resultPortion_GotFocus" ></TextBox>
+                                <TextBlock Text="person(s)." FontSize="14" VerticalAlignment="Center"></TextBlock>
+                            </StackPanel>
+                        </DockPanel>
+                        <TextBlock Text="Ingredients required for the selected recipe" Margin="10,0" FontSize="14" DockPanel.Dock="Top"></TextBlock>
+                        <ListBox Name="lbox_ingredientsRequired" Margin="10" DockPanel.Dock="Top">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <!--<CheckBox Name="{Binding IngredientName}"></CheckBox>-->
+                                    <TextBlock>
                             <Run Text="{Binding IngredientName}"/>
                             <Run Text=" - "/>
                              <Run>
@@ -85,30 +92,43 @@
                                  </Run.Text>
                              </Run>
                             <Run Text="{Binding QuantityUnit}"/>
-                            </TextBlock>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                
-                <StackPanel Name="spanel_headMissing" Orientation="Horizontal" Margin="10,5">
-                    <Rectangle Width="10" Height="12" Stroke="black" Fill="red" Margin="5,0"></Rectangle>
-                    <TextBlock Text="Ingredients that are not available" Margin="5,0" FontSize="14"></TextBlock>
-                    <Rectangle Width="10" Height="12" Stroke="black" Fill="Goldenrod" Margin="5,0" ></Rectangle>
-                    <TextBlock Text="Ingredients that are optional" Margin="5,0" FontSize="14"></TextBlock>
-                </StackPanel>
-                <ListBox Name="lbox_MissingIngredients" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Foreground="{Binding IsOptional, Converter={StaticResource BoolToColorConverter}}">
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                   
+                </DockPanel>
+                <DockPanel Grid.Row="1" LastChildFill="False">
+                    <DockPanel Name="spanel_headMissing" DockPanel.Dock="Top" Margin="10,5">
+                        <Rectangle Width="10" Height="12" Stroke="black" Fill="red" Margin="5,0"></Rectangle>
+                        <TextBlock Text="Ingredients that are not available" Margin="5,0" FontSize="14"></TextBlock>
+                        <Rectangle Width="10" Height="12" Stroke="black" Fill="Goldenrod" Margin="5,0" ></Rectangle>
+                        <TextBlock Text="Ingredients that are optional" Margin="5,0" FontSize="14"></TextBlock>
+                    </DockPanel>
+                    <ListBox Name="lbox_MissingIngredients" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" DockPanel.Dock="Top">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="{Binding IsOptional, Converter={StaticResource BoolToColorConverter}}">
                                 <Run Text="{Binding IngredientName}"/>
                                 <Run Text=" - "/>
                                 <Run Text="{Binding IngredientQty}"/>
                                 <Run Text="{Binding QuantityUnit}"/>
-                            </TextBlock>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <!--<StackPanel Name="spanel_headMissing" Orientation="Horizontal" Margin="10,5">-->
+                        
+                    <!--</StackPanel>-->
+                    
+                </DockPanel>
+            </Grid>
+            <!--<StackPanel Name="spanel_Result"  Orientation="Vertical" Grid.Row="0" Visibility="Hidden">-->
+                
+                
+                
+                
+            <!--</StackPanel>-->
             
             
             

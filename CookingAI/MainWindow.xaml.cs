@@ -133,7 +133,7 @@ namespace CookingAI
                         //lbox_ingredientsRequired.IsEnabled = false;
                         lbox_MissingIngredients.Visibility = Visibility.Hidden;
                         btn_addToCart.Visibility = Visibility.Hidden;
-                        lbox_ingredientsRequired.MaxHeight = 150;
+                        //lbox_ingredientsRequired.MaxHeight = 150;
                         btn_updateRec.Visibility = Visibility.Visible;
                         spanel_headMissing.Visibility = Visibility.Hidden;
                         //MAKE BUTTON AND ENABLE IT!
@@ -157,8 +157,8 @@ namespace CookingAI
 
                         // tblock_headMissing.Foreground = Brushes.Red;
                         //  tblock_headMissing.Text = "You will need --->";
-                        lbox_ingredientsRequired.MaxHeight = 60;
-                        lbox_MissingIngredients.MaxHeight = 40;
+                        //lbox_ingredientsRequired.MaxHeight = 60;
+                        //lbox_MissingIngredients.MaxHeight = 40;
                         lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
                         //lbox_MissingIngredients.IsEnabled = false;
                         spanel_headMissing.Visibility = Visibility.Visible;
@@ -301,16 +301,9 @@ namespace CookingAI
 
         private void btn_Home_Click(object sender, RoutedEventArgs e)
         {
-            spanel_Home.Visibility = Visibility.Visible;
-            spanel_Result.Visibility = Visibility.Hidden;
             tblock_result.Text = string.Empty;
-            //initialState = false;
-            tbox_Servings.Text = "1";
             cbox_meals.SelectedIndex = -1;
-            btn_Home.Visibility = Visibility.Hidden;
-            btn_addToCart.Visibility = Visibility.Hidden;
-
-
+            initializeWindow();
         }
 
         private bool checkPortionValue()
