@@ -33,7 +33,8 @@
 
                 </ComboBox>
                 <TextBlock Text="for" Margin="10" FontSize="14" FontWeight="Bold"/>
-                <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10" />
+                <TextBox Name="tbox_Servings" Width="50" Text="{Binding ElementName=tbox_resultPortion,Path=Text}" HorizontalContentAlignment="Center" Margin="10">
+                </TextBox>
                 <TextBlock Text="person(s)." Margin="10,10,0,10" FontSize="14" FontWeight="Bold"></TextBlock>
                 <Button Name="btn_Check" Margin="10" Width="120" Content="Is it Possible?" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Click="btn_Check_Click"/>
             </StackPanel>

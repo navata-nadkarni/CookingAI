@@ -25,6 +25,7 @@ namespace CookingAI
         //ObservableCollection<Ingredient> _availableIngredients=new ObservableCollection<Ingredient>();
         //ObservableCollection<Ingredient> _allIngredients;
         Boolean _initialState;
+        Ingredient tempIngredient=new Ingredient();
         public Manage_Ingredients()
         {
             InitializeComponent();
@@ -92,6 +93,14 @@ namespace CookingAI
 
         private void btn_cancel_Click(object sender, RoutedEventArgs e)
         {
+           /* if(lview_Ingredients.SelectedItem!=null)
+            {
+                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = tempIngredient.IngredientQty;
+                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = tempIngredient.QuantityUnit;
+                
+            }
+            
+            App.refreshData();*/
             popup_AddNew.IsOpen = false;
         }
 
@@ -132,6 +141,7 @@ namespace CookingAI
 
         private void btn_Edit_Click(object sender, RoutedEventArgs e)
         {
+            
             Edit_Ingredient();
                      
         }
@@ -149,6 +159,11 @@ namespace CookingAI
                 //cbox_AddIngredients.IsEnabled = false;
                 //tbox_qty.Text = (((Ingredient)lview_Ingredients.SelectedItem).IngredientQty).ToString();
                 //tbox_unit.Text = ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit;
+               /* tempIngredient = new Ingredient {
+                    IngredientName = ((Ingredient)lview_Ingredients.SelectedItem).IngredientName,
+                    IngredientQty = ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty,
+                    QuantityUnit = ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit
+                };*/
                 App.refreshData();
                 cbox_AddIngredients.ItemsSource = lview_Ingredients.ItemsSource;
                 cbox_AddIngredients.SelectedItem = lview_Ingredients.SelectedItem;

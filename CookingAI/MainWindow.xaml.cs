@@ -113,8 +113,11 @@ namespace CookingAI
 
         private void btn_Check_Click(object sender, RoutedEventArgs e)
         {
-            
-                //initialState = true;
+            bool isSuccess=checkPortionValue();
+            //initialState = true;
+
+            if (isSuccess)
+            {
                 if (cbox_meals.SelectedIndex != -1 && tbox_Servings.Text != string.Empty)
                 {
                     spanel_Home.Visibility = Visibility.Hidden;
@@ -171,8 +174,13 @@ namespace CookingAI
                 //tblock_result.Visibility = Visibility.Visible; 
                 else
                 {
-                    MessageBox.Show("Please enter meal details");
-                }
+                    if (cbox_meals.Text == string.Empty)
+                        MessageBox.Show("Please enter meal details", "Warning");
+                    else
+                        MessageBox.Show("Recipe does not exist", "Error");
+                } 
+            }
+
             
         }
 
@@ -307,26 +315,29 @@ namespace CookingAI
 
         }
 
-        private void checkPortionValue()
+        private bool checkPortionValue()
         {
-            Regex check_input = new Regex(@"^[0-9]+$");
+            Regex check_input = new Regex(@"^[1-9]+$");
             if (check_input.IsMatch(tbox_Servings.Text))
             {
-                btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                return true;
             }
             else
             {
-                MessageBox.Show("Please enter digits for no. of persons/servings");
+                spanel_Home.Visibility = Visibility.Visible;
+                spanel_Result.Visibility = Visibility.Hidden;
+                btn_addToCart.Visibility = Visibility.Hidden;
+                btn_updateRec.Visibility = Visibility.Hidden;
+                MessageBox.Show("Please enter valid no. of persons/servings","Warning");
+                return false;
             }
         }
 
         private void tbox_resultPortion_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(spanel_Home.Visibility!=Visibility.Visible)
-            {
-                checkPortionValue();
-            }
-            
+            if (spanel_Home.Visibility == Visibility.Hidden)
+                btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+
         }
 
         private void tbox_resultPortion_GotFocus(object sender, RoutedEventArgs e)
@@ -362,7 +373,7 @@ namespace CookingAI
                
             }
             MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
-            MessageBox.Show("Ingredients successfully added to cart");
+            MessageBox.Show("Ingredients successfully added to cart","Success");
            // initializeWindow();
         }
 
@@ -429,9 +440,10 @@ namespace CookingAI
                    
             }
             App.refreshData();
-            MessageBox.Show("Your available ingredients have been updated");
+            MessageBox.Show("Your available ingredients have been updated","Success");
             cbox_meals.SelectedIndex = -1;
             initializeWindow();
         }
+
     }
 }
