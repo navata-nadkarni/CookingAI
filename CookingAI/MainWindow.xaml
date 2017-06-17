@@ -111,6 +111,8 @@
             </StackPanel>
             
             
+            
+            
             <Viewbox Grid.Row="2" MaxHeight="100" HorizontalAlignment="Left" Margin="10">
                 <Button Name="btn_Home" Margin="10" Grid.Row="2" HorizontalAlignment="Left" Visibility="Hidden" Click="btn_Home_Click" BorderBrush="White">
                     <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\home.JPG"></Image>

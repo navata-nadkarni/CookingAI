@@ -85,7 +85,7 @@ namespace CookingAI
             //_recipes = MyStorage.readXML<List<Recipe>>("recipes.xml");
             //_ingredients = MyStorage.readXML<ObservableCollection<Ingredient>>("ingredients.xml");
             initializeWindow();
-            
+           
             //App._shoppingCart = new ObservableCollection<Ingredient>();
             //var availableIngredients = from i in _ingredients where i.IngredientQty !=0 select i;
             //_available = new ObservableCollection<Ingredient>((from i in _ingredients where i.IngredientQty != 0 select i).ToList());
@@ -95,13 +95,11 @@ namespace CookingAI
 
         private void initializeWindow()
         {
+            goToHomeWindow();
             recipeItemSource = new List<Recipe>(App._recipes);
             recipeItemSource.Add(new Recipe { RecipeName = "Add new Recipe" });
             cbox_meals.ItemsSource = recipeItemSource;
             tbox_Servings.Text = "1";
-            spanel_Home.Visibility = Visibility.Visible;
-            spanel_Result.Visibility = Visibility.Hidden;
-            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -324,20 +322,25 @@ namespace CookingAI
             }
             else
             {
-                spanel_Home.Visibility = Visibility.Visible;
-                spanel_Result.Visibility = Visibility.Hidden;
-                btn_addToCart.Visibility = Visibility.Hidden;
-                btn_updateRec.Visibility = Visibility.Hidden;
+                goToHomeWindow();
                 MessageBox.Show("Please enter valid no. of persons/servings","Warning");
                 return false;
             }
+        }
+
+        private void goToHomeWindow()
+        {
+            spanel_Home.Visibility = Visibility.Visible;
+            spanel_Result.Visibility = Visibility.Hidden;
+            btn_addToCart.Visibility = Visibility.Hidden;
+            btn_updateRec.Visibility = Visibility.Hidden;
+            btn_Home.Visibility = Visibility.Hidden;
         }
 
         private void tbox_resultPortion_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (spanel_Home.Visibility == Visibility.Hidden)
                 btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-
         }
 
         private void tbox_resultPortion_GotFocus(object sender, RoutedEventArgs e)
@@ -410,10 +413,6 @@ namespace CookingAI
         {
             if (cbox_meals.SelectedItem != null)
             {
-                spanel_Home.Visibility = Visibility.Visible;
-                spanel_Result.Visibility = Visibility.Hidden;
-                btn_addToCart.Visibility = Visibility.Hidden;
-                btn_updateRec.Visibility = Visibility.Hidden;
                 if (((Recipe)cbox_meals.SelectedItem).RecipeName == "Add new Recipe")
                 {
                     NewRecipe newRecipe = new NewRecipe();
@@ -421,7 +420,9 @@ namespace CookingAI
                     newRecipe.ShowDialog();
                     initializeWindow();
                    
-                } 
+                }
+                else if (spanel_Home.Visibility == Visibility.Hidden)
+                    btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
             
         }
