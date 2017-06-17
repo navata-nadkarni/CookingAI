@@ -53,7 +53,7 @@
                         <ColumnDefinition Width="50*"/>
                     </Grid.ColumnDefinitions>
                     <Viewbox Grid.Column="0">
-                        <TextBlock Margin="10" TextWrapping="Wrap" Width="300" MaxHeight="500" FontSize="13">This is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not.is application helps you know if it is possible to make a recipe or not</TextBlock>
+                        <TextBlock Margin="10" TextWrapping="Wrap" Width="300" MaxHeight="500" FontSize="13">"Cooking with Intelligence" is an application which helps the you decide if you can make a certain meal. It gives you alternatives for ingredients which you do not have.You can manage the ingredients and also keep a track on the quantity of ingredients that you have used. You can also maintain a shopping list which can be easily exported to a text document. You can also get the amount of ingredients you need by specifying the number of people you will be cooking for. All these benefits in just a few clicks!</TextBlock>
                     </Viewbox>
                     <DockPanel Grid.Column="1">
                         <Image Source="C:\Users\navata\documents\visual studio 2017\Projects\CookingAI\CookingAI\medit_diet-768x403.jpg" MinWidth="325"  Margin="15"/>
@@ -63,17 +63,12 @@
             <StackPanel Name="spanel_Result"  Orientation="Vertical" Grid.Row="0" Visibility="Hidden">
                 <StackPanel Name="spanel_resultText" Orientation="Horizontal">
                     <TextBlock Name="tblock_result" Margin="10" VerticalAlignment="Center" FontSize="14"></TextBlock>
-
                     <StackPanel Name="spanel_portionStack" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Name="tbox_resultPortion" Margin="10" Width="50" HorizontalContentAlignment="Center" Text="{Binding ElementName=tbox_Servings,Path=Text}"  TextChanged="tbox_resultPortion_TextChanged" GotFocus="tbox_resultPortion_GotFocus" ></TextBox>
                         <TextBlock Text="person(s)." FontSize="14" VerticalAlignment="Center"></TextBlock>
-
                     </StackPanel>
                 </StackPanel>
-
-                <Viewbox>
-                    
-                </Viewbox>
+                <TextBlock Text="Ingredients required for the selected recipe" Margin="10,0" FontSize="14"></TextBlock>
                 <ListBox Name="lbox_ingredientsRequired" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -96,10 +91,10 @@
                 </ListBox>
                 
                 <StackPanel Name="spanel_headMissing" Orientation="Horizontal" Margin="10,5">
-                    <Rectangle Width="10" Height="10" Stroke="black" Fill="red" Margin="5,0"></Rectangle>
-                    <TextBlock Text="Ingredients you need" Margin="5,0"></TextBlock>
-                    <Rectangle Width="10" Height="10" Stroke="black" Fill="Goldenrod" Margin="5,0"></Rectangle>
-                    <TextBlock Text="Ingredients that are  optional" Margin="5,0"></TextBlock>
+                    <Rectangle Width="10" Height="12" Stroke="black" Fill="red" Margin="5,0"></Rectangle>
+                    <TextBlock Text="Ingredients that are not available" Margin="5,0" FontSize="14"></TextBlock>
+                    <Rectangle Width="10" Height="12" Stroke="black" Fill="Goldenrod" Margin="5,0" ></Rectangle>
+                    <TextBlock Text="Ingredients that are optional" Margin="5,0" FontSize="14"></TextBlock>
                 </StackPanel>
                 <ListBox Name="lbox_MissingIngredients" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <ListBox.ItemTemplate>
@@ -123,10 +118,10 @@
             </Viewbox>
             <Viewbox Grid.Row="2" MaxHeight="100" HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
-                    <Button Name="btn_updateRec" Content="Update Ingredients" Width="150" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Click="btn_updateRec_Click"></Button>
-                    <Button Name="btn_addToCart" Content="Add to cart" Width="100" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Click="btn_addToCart_Click" />
-                    <Button Name="btn_ViewCart" Content="Go to Cart" FontSize="14" FontWeight="Bold" Margin="10" Width="100" Click="btn_ViewCart_Click"/>
-                    <Button Name="btn_ManageIngredients" Content="Manage Ingredients" FontSize="14" FontWeight="Bold" Grid.Row="2" Width="150" Height="25" Margin="10" Click="btn_ManageIngredients_Click"/>
+                    <Button Name="btn_updateRec" Content="Update Ingredients" ToolTip="Update the quantities of the ingredients you have used" Width="150" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Click="btn_updateRec_Click"></Button>
+                    <Button Name="btn_addToCart" Content="Add to cart" ToolTip="Add ingredients that you dont have to the ingredient shopping list" Width="100" FontSize="14" FontWeight="Bold" Margin="10" Visibility="Hidden" Click="btn_addToCart_Click" />
+                    <Button Name="btn_ViewCart" Content="Go to Cart" ToolTip="View the ingredient shopping list" FontSize="14" FontWeight="Bold" Margin="10" Width="100" Click="btn_ViewCart_Click"/>
+                    <Button Name="btn_ManageIngredients" Content="Manage Ingredients" FontSize="14" FontWeight="Bold" Grid.Row="2" Width="150" Height="25" Margin="10" Click="btn_ManageIngredients_Click" ToolTip="Manage ingredients you have"/>
                 </StackPanel>
             </Viewbox>
         </Grid>

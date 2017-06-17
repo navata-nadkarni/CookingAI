@@ -159,7 +159,7 @@ namespace CookingAI
 
                         // tblock_headMissing.Foreground = Brushes.Red;
                         //  tblock_headMissing.Text = "You will need --->";
-                        lbox_ingredientsRequired.MaxHeight = 75;
+                        lbox_ingredientsRequired.MaxHeight = 60;
                         lbox_MissingIngredients.MaxHeight = 40;
                         lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
                         //lbox_MissingIngredients.IsEnabled = false;
