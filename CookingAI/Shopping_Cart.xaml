@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CookingAI"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing"
-        Title="Shopping_Cart" Height="400" Width="600">
+        Title="Cooking With Intelligence" Height="400" Width="600">
     <Grid IsEnabled="{Binding ElementName=popup_AddNew, Path=IsOpen, Converter={StaticResource InvertBoolConverter}}">
         
         <!--<TextBlock Grid.Row="0" Text="Manage Ingredients" VerticalAlignment="Center" FontSize="18" Margin="10"></TextBlock>-->
         <!--<GridSplitter Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
         <StackPanel Name="spanel_CartItemsMain" Orientation="Vertical">
-            <TextBlock Text="Shopping Cart" FontSize="16" Margin="10,0,10,0"></TextBlock>
+            <TextBlock Text="Shopping Cart" FontSize="16" FontWeight="Bold" Margin="10,0,10,0"></TextBlock>
             <TextBox Name="tbox_Filter" Margin="10,10,10,0" TextChanged="tbox_Filter_TextChanged" GotFocus="tbox_Filter_GotFocus"  Text="Filter For Cart Items" Foreground="DarkGray" LostFocus="tbox_Filter_LostFocus" ></TextBox>
             <DockPanel Height="250" Margin="10">
                 <ListView Name="lview_Ingredients" MouseDoubleClick="lview_Ingredients_MouseDoubleClick">
@@ -58,13 +58,13 @@
             <DockPanel LastChildFill="False">
                 <Button Name="btn_back" Margin="10,10,2,10" FontSize="14" Width="50" FontWeight="Bold" DockPanel.Dock="Left" Click="btn_back_Click">Back</Button>
 
-                <Button Name="btn_Clear" Content="Empty Cart" Margin="2,10,10,10" Width="85" FontSize="14" FontWeight="Bold" Click="btn_Clear_Click" DockPanel.Dock="Right" ToolTip="Clear ingredient shopping list"></Button>
+                <Button Name="btn_Clear" Content="Empty Cart" Margin="2,10,10,10" Width="85" FontSize="14" FontWeight="Bold" Click="btn_Clear_Click" DockPanel.Dock="Right" ToolTip="Clear ingredient shopping cart"></Button>
 
-                <Button Name="btn_Remove" Content="Remove Ingredient" Width="130" Margin="2,10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Remove selected ingredient from ingredient shopping list"></Button>
+                <Button Name="btn_Remove" Content="Remove Ingredient" Width="130" Margin="2,10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Remove selected ingredient from ingredient shopping cart"></Button>
 
-                <Button Name="btn_Edit" Content="Edit Ingredient" Width="110" Margin="2,10" Click="btn_Edit_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Edit ingredient in ingredient shopping list"></Button>
+                <Button Name="btn_Edit" Content="Edit Ingredient" Width="110" Margin="2,10" Click="btn_Edit_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Edit ingredient in ingredient shopping cart"></Button>
 
-                <Button Name="btn_Add" Width="110" Margin="2,10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Add ingredient to ingredient shopping list">Add Ingredient</Button>
+                <Button Name="btn_Add" Width="110" Margin="2,10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Add ingredient to ingredient shopping cart">Add Ingredient</Button>
                 <StackPanel>
                     <Popup Name="popup_AddNew" VerticalAlignment="Center" HorizontalAlignment="Center" PlacementTarget="{Binding ElementName=lview_Ingredients}" AllowsTransparency="True" Placement="Center">
                         <Border BorderThickness="2" BorderBrush="black">
