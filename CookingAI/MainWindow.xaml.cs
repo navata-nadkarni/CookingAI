@@ -422,8 +422,8 @@ namespace CookingAI
                 {
                     NewRecipe newRecipe = new NewRecipe();
                     newRecipe.Owner = this;
-                    newRecipe.ShowDialog();
-                    initializeWindow();
+                    newRecipe.Show();
+                    //initializeWindow();
                    
                 }
                 else if (spanel_Home.Visibility == Visibility.Hidden)

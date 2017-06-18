@@ -199,10 +199,8 @@ namespace CookingAI
                 if (ingredientTemp == null)
                 {
                     App._shoppingCart.Add((Ingredient)cbox_AddIngredients.SelectedItem);
-                    MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
+                   // MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
                 }
-                    
-
                 _shoppingCartOptions.Remove((Ingredient)cbox_AddIngredients.SelectedItem);
                 lview_Ingredients.ItemsSource = App._shoppingCart;
                 setControls();
