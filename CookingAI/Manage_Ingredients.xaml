@@ -6,9 +6,6 @@
         xmlns:local="clr-namespace:CookingAI"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="Cooking With Intelligence" Height="400" Width="600" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <local:InvertBooleanConverter x:Key="InvertBoolConverter"/>
-    </Window.Resources>
     <Grid IsEnabled="{Binding ElementName=popup_AddNew, Path=IsOpen, Converter={StaticResource InvertBoolConverter}}">
         <Grid.RowDefinitions>
             <!--<RowDefinition Height="2*"></RowDefinition>-->

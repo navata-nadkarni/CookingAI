@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:CookingAI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:MultiplyConverter x:Key="MultiplyConverter"/>
+        <local:BoolToColourConverter x:Key="BoolToColorConverter"/>
+        <local:InvertBooleanConverter x:Key="InvertBoolConverter"/>
     </Application.Resources>
 </Application>
