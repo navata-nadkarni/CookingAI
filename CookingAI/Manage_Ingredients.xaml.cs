@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,6 +42,7 @@ namespace CookingAI
             //var availableIngredients = from i in _ingredients where i.IngredientQty != 0 select i;
             //_availableIngredients = new ObservableCollection<Ingredient>((from i in _ingredients where i.IngredientQty != 0 select i).ToList());
             Owner.Hide();
+
             lview_Ingredients.ItemsSource = App._availableIngredients;
             if (App._availableIngredients==null)
             {
@@ -83,26 +85,30 @@ namespace CookingAI
             }
            else
             {
-                MessageBox.Show("Please Select an ingredient");
+                MessageBox.Show("Please Select an ingredient", "Warning");
             }
            
         }
 
         private void btn_Add_Click(object sender, RoutedEventArgs e)
         {
+            tblock_errorMessage.Visibility = Visibility.Hidden;
             AddIngredients();
         }
 
         private void btn_cancel_Click(object sender, RoutedEventArgs e)
         {
-           /* if(lview_Ingredients.SelectedItem!=null)
+            if (lview_Ingredients.SelectedItem != null)
             {
+                //lview_Ingredients.ItemsSource = null;
+                //lview_Ingredients.ItemsSource = App._availableIngredients;
                 ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = tempIngredient.IngredientQty;
                 ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = tempIngredient.QuantityUnit;
-                
+                lview_Ingredients.ItemsSource = null;
+                lview_Ingredients.ItemsSource = App._availableIngredients;
             }
-            
-            App.refreshData();*/
+
+           
             popup_AddNew.IsOpen = false;
         }
 
@@ -115,9 +121,31 @@ namespace CookingAI
             ////lview_Ingredients.ItemsSource = App._availableIngredients;
             //btn_Edit.IsEnabled = true;
             //btn_Remove.IsEnabled = true;
-            App.refreshData();
-            lview_Ingredients.ItemsSource = App._availableIngredients;
-            popup_AddNew.IsOpen = false;
+            Regex check_input = new Regex(@"^[1-9][0-9]*$");
+            if (cbox_AddIngredients.SelectedIndex!=-1 && check_input.IsMatch(tbox_qty.Text))
+            {
+                App.refreshData();
+                lview_Ingredients.ItemsSource = App._availableIngredients;
+                popup_AddNew.IsOpen = false;
+            }
+            else
+            {
+                tblock_errorMessage.Foreground = Brushes.Red;
+                tblock_errorMessage.Visibility = Visibility.Visible;
+                if(cbox_AddIngredients.Text==string.Empty || tbox_qty.Text==string.Empty)
+                {
+                    tblock_errorMessage.Text = "Please enter all the ingredient details";
+                }
+                else if(!(check_input.IsMatch(tbox_qty.Text))) 
+                {
+                    tblock_errorMessage.Text = "Quantity is not valid";
+                }
+                else
+                {
+                    tblock_errorMessage.Text = "Ingredient does not exist";
+                }
+            }
+            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -136,6 +164,7 @@ namespace CookingAI
                     var elements_contain = (from i in App._availableIngredients where i.IngredientName.ToLower().Contains(tbox_Filter.Text.ToLower()) select i).ToList();
                     elements.AddRange(elements_contain);
                     lview_Ingredients.ItemsSource = elements.Distinct();
+                    cbox_AddIngredients.IsDropDownOpen = true;
                 }
             }
             _initialState = true;
@@ -143,7 +172,7 @@ namespace CookingAI
 
         private void btn_Edit_Click(object sender, RoutedEventArgs e)
         {
-            
+            tblock_errorMessage.Visibility = Visibility.Hidden;
             Edit_Ingredient();
                      
         }
@@ -161,11 +190,12 @@ namespace CookingAI
                 //cbox_AddIngredients.IsEnabled = false;
                 //tbox_qty.Text = (((Ingredient)lview_Ingredients.SelectedItem).IngredientQty).ToString();
                 //tbox_unit.Text = ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit;
-               /* tempIngredient = new Ingredient {
+                tempIngredient = new Ingredient
+                {
                     IngredientName = ((Ingredient)lview_Ingredients.SelectedItem).IngredientName,
                     IngredientQty = ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty,
                     QuantityUnit = ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit
-                };*/
+                };
                 App.refreshData();
                 cbox_AddIngredients.ItemsSource = lview_Ingredients.ItemsSource;
                 cbox_AddIngredients.SelectedItem = lview_Ingredients.SelectedItem;
@@ -173,7 +203,7 @@ namespace CookingAI
                 popup_AddNew.IsOpen = true;
             }
             else
-                MessageBox.Show("Please Select an ingredient! ");
+                MessageBox.Show("Please Select an ingredient!","Warning");
         }
 
         private void btn_AddIngredients_Click(object sender, RoutedEventArgs e)
@@ -190,8 +220,7 @@ namespace CookingAI
             //cbox_AddIngredients.ItemsSource = App._allIngredients;
             //cbox_AddIngredients.IsEnabled = true;
             //tbox_qty.Text = null;
-            //tbox_unit.Text = null;
-
+            //tbox_unit.Text = null; 
             cbox_AddIngredients.ItemsSource = App._allIngredients;
             cbox_AddIngredients.IsEnabled = true;
             popup_AddNew.IsOpen = true;
@@ -228,12 +257,16 @@ namespace CookingAI
             MainWindow mainWindow = new MainWindow();
             this.Close();
             mainWindow.Show();
-            mainWindow.InitializeComponent();
-            mainWindow.cbox_meals.SelectedItem = (Recipe)Application.Current.Resources["selectedItem"];
-            mainWindow.tbox_Servings.Text = Application.Current.Resources["noOfPersons"].ToString();
-            mainWindow.btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-            
-            
+            //if(mainWindow.spanel_Home.Visibility==Visibility.Hidden)
+            //{
+                if ((Recipe)Application.Current.Resources["selectedItem"] != null && Application.Current.Resources["noOfPersons"].ToString() != string.Empty)
+                {
+                    // mainWindow.InitializeComponent();
+                    mainWindow.cbox_meals.SelectedItem = (Recipe)Application.Current.Resources["selectedItem"];
+                    mainWindow.tbox_Servings.Text = Application.Current.Resources["noOfPersons"].ToString();
+                    mainWindow.btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                }
+            //}
             
         }
     }

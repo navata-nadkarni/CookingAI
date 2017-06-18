@@ -79,12 +79,13 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
                                     <TextBlock Text="Enter Quantity" Width="100"></TextBlock>
-                                    <TextBox Name="tbox_qty"  Width="50" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding IngredientQty}"></TextBox>
+                                    <TextBox Name="tbox_qty"  Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding IngredientQty}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
                                     <TextBlock Text="Unit for quantity" Width="100"></TextBlock>
                                     <TextBox Name="tbox_unit" Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding QuantityUnit}"></TextBox>
                                 </StackPanel>
+                                <TextBlock Name="tblock_errorMessage" Margin="20,5" Visibility="Hidden"></TextBlock>
                                 <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Right">
                                     <Button Name="btn_Save" Content="Save" Margin="5" Click="btn_Save_Click" FontSize="12" FontWeight="Bold"></Button>
                                     <Button Name="btn_cancel" Content="Cancel" Margin="5" Click="btn_cancel_Click" FontSize="12" FontWeight="Bold"></Button>

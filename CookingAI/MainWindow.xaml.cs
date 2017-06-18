@@ -309,7 +309,7 @@ namespace CookingAI
 
         private bool checkPortionValue()
         {
-            Regex check_input = new Regex(@"^[1-9]+$");
+            Regex check_input = new Regex(@"^[1-9][0-9]*$");
             if (check_input.IsMatch(tbox_Servings.Text))
             {
                 return true;
