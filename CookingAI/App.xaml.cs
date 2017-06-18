@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 
 namespace CookingAI
 {
@@ -41,5 +42,19 @@ namespace CookingAI
             _allIngredients = new ObservableCollection<Ingredient>((from i in _ingredients where i.IngredientQty == 0 select i).ToList());
         }
 
+        public static void goBack()
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            if (!((bool)Application.Current.Resources["isHome"]))
+            {
+                if ((Recipe)Application.Current.Resources["selectedItem"] != null && Application.Current.Resources["noOfPersons"].ToString() != string.Empty)
+                {
+                    mainWindow.cbox_meals.SelectedItem = (Recipe)Application.Current.Resources["selectedItem"];
+                    mainWindow.tbox_Servings.Text = Application.Current.Resources["noOfPersons"].ToString();
+                    mainWindow.btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                }
+            }
+        }
     }
 }

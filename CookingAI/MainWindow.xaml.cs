@@ -293,11 +293,21 @@ namespace CookingAI
         {
             Manage_Ingredients manageIngredients = new Manage_Ingredients();
             manageIngredients.Owner = this;
-            Application.Current.Resources["selectedItem"] =(Recipe)cbox_meals.SelectedItem ;
-            Application.Current.Resources["noOfPersons"] = tbox_Servings.Text;
+            setSessionVariables();
+            
             //this.Visibility = Visibility.Hidden;
             manageIngredients.Show();
             //initializeWindow();
+        }
+
+        private void setSessionVariables()
+        {
+            Application.Current.Resources["selectedItem"] = (Recipe)cbox_meals.SelectedItem;
+            Application.Current.Resources["noOfPersons"] = tbox_Servings.Text;
+            if (spanel_Home.Visibility == Visibility.Visible)
+                Application.Current.Resources["isHome"] = true;
+            else
+                Application.Current.Resources["isHome"] = false;
         }
 
         private void btn_Home_Click(object sender, RoutedEventArgs e)
@@ -378,7 +388,8 @@ namespace CookingAI
         {
             Shopping_Cart sCart = new Shopping_Cart();
             sCart.Owner = this;
-            sCart.ShowDialog();
+            setSessionVariables();
+            sCart.Show();
            // initializeWindow();
         }
 

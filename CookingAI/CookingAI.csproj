@@ -55,6 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BoolToColourConverter.cs" />
+    <Compile Include="InvertBooleanConverter.cs" />
     <Compile Include="Manage_Ingredients.xaml.cs">
       <DependentUpon>Manage_Ingredients.xaml</DependentUpon>
     </Compile>

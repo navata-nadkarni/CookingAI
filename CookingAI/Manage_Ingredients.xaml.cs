@@ -172,13 +172,14 @@ namespace CookingAI
 
         private void btn_Edit_Click(object sender, RoutedEventArgs e)
         {
-            tblock_errorMessage.Visibility = Visibility.Hidden;
+            
             Edit_Ingredient();
                      
         }
 
         private void Edit_Ingredient()
         {
+            tblock_errorMessage.Text = string.Empty;
             //cbox_AddIngredients.ItemsSource = _ingredients;
             //cbox_AddIngredients.DisplayMemberPath = ((Ingredient)lview_Ingredients.SelectedItem).IngredientName;
             if (lview_Ingredients.SelectedItem != null)
@@ -197,6 +198,7 @@ namespace CookingAI
                     QuantityUnit = ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit
                 };
                 App.refreshData();
+                cbox_AddIngredients.ItemsSource = null;
                 cbox_AddIngredients.ItemsSource = lview_Ingredients.ItemsSource;
                 cbox_AddIngredients.SelectedItem = lview_Ingredients.SelectedItem;
                 cbox_AddIngredients.IsEnabled = false;
@@ -213,6 +215,7 @@ namespace CookingAI
 
         private void AddIngredients()
         {
+            tblock_errorMessage.Text = string.Empty;
             //App._allIngredients = new ObservableCollection<Ingredient>((from i in App._ingredients where i.IngredientQty == 0 select i).ToList());
             //cbox_AddIngredients.DataContext = this;
             //if (cbox_AddIngredients.ItemsSource == null) cbox_AddIngredients.Items.Clear();
@@ -254,20 +257,8 @@ namespace CookingAI
 
         private void btn_back_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
             this.Close();
-            mainWindow.Show();
-            //if(mainWindow.spanel_Home.Visibility==Visibility.Hidden)
-            //{
-                if ((Recipe)Application.Current.Resources["selectedItem"] != null && Application.Current.Resources["noOfPersons"].ToString() != string.Empty)
-                {
-                    // mainWindow.InitializeComponent();
-                    mainWindow.cbox_meals.SelectedItem = (Recipe)Application.Current.Resources["selectedItem"];
-                    mainWindow.tbox_Servings.Text = Application.Current.Resources["noOfPersons"].ToString();
-                    mainWindow.btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-                }
-            //}
-            
+            App.goBack(); 
         }
     }
 }

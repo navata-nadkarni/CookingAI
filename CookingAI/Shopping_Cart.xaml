@@ -24,7 +24,7 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ListView">
                                                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center" VerticalAlignment="center">
-                                                    <TextBlock Text="There are no ingredients in your cart. Add them" FontSize="14" FontWeight="Bold" Margin="5"/>
+                                                    <TextBlock Text="There are no ingredients.Add them" FontSize="14" FontWeight="Bold" Margin="5"/>
                                                     <!--<Button Name="btn_AddIngredients" Content="Add" Margin="5">
                                                         <Button.Style>
                                                             <Style x:Name="buttonStyle">
@@ -55,9 +55,16 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </DockPanel>
-            <DockPanel HorizontalAlignment="Center">
-                <Button Name="btn_Export" Width="60" Margin="10,10,3,10" FontSize="14" FontWeight="Bold" Content="Export" Click="btn_Export_Click"></Button>
-                <Button Name="btn_Add" Width="120" Margin="3,10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold">Add Ingredient</Button>
+            <DockPanel LastChildFill="False">
+                <Button Name="btn_back" Margin="10,10,2,10" FontSize="14" Width="50" FontWeight="Bold" DockPanel.Dock="Left" Click="btn_back_Click">Back</Button>
+
+                <Button Name="btn_Clear" Content="Empty Cart" Margin="2,10,10,10" Width="85" FontSize="14" FontWeight="Bold" Click="btn_Clear_Click" DockPanel.Dock="Right" ToolTip="Clear ingredient shopping list"></Button>
+
+                <Button Name="btn_Remove" Content="Remove Ingredient" Width="130" Margin="2,10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Remove selected ingredient from ingredient shopping list"></Button>
+
+                <Button Name="btn_Edit" Content="Edit Ingredient" Width="110" Margin="2,10" Click="btn_Edit_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Edit ingredient in ingredient shopping list"></Button>
+
+                <Button Name="btn_Add" Width="110" Margin="2,10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold" DockPanel.Dock="Right" ToolTip="Add ingredient to ingredient shopping list">Add Ingredient</Button>
                 <StackPanel>
                     <Popup Name="popup_AddNew" VerticalAlignment="Center" HorizontalAlignment="Center" PlacementTarget="{Binding ElementName=lview_Ingredients}" AllowsTransparency="True" Placement="Center">
                         <Border BorderThickness="2" BorderBrush="black">
@@ -69,12 +76,13 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
                                     <TextBlock Text="Enter Quantity" Width="100"></TextBlock>
-                                    <TextBox Name="tbox_qty"  Width="50" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding IngredientQty}"></TextBox>
+                                    <TextBox Name="tbox_qty"  Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding IngredientQty}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
                                     <TextBlock Text="Unit for quantity" Width="100"></TextBlock>
                                     <TextBox Name="tbox_unit" Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding QuantityUnit}"></TextBox>
                                 </StackPanel>
+                                <TextBlock Name="tblock_errorMessage" Margin="20,5"></TextBlock>
                                 <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Right">
                                     <Button Name="btn_Save" Content="Save" Margin="5" Click="btn_Save_Click" FontSize="12" FontWeight="Bold"></Button>
                                     <Button Name="btn_cancel" Content="Cancel" Margin="5" Click="btn_cancel_Click" FontSize="12" FontWeight="Bold"></Button>
@@ -83,9 +91,9 @@
                         </Border>
                     </Popup>
                 </StackPanel>
-                <Button Name="btn_Edit" Content="Edit Ingredient" Width="120" Margin="3,10" Click="btn_Edit_Click" FontSize="14" FontWeight="Bold"></Button>
-                <Button Name="btn_Remove" Content="Remove Ingredient" Width="140" Margin="3,10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold"></Button>
-                <Button Name="btn_Clear" Content="Empty Cart" Margin="3,10,10,10" Width="90" FontSize="14" FontWeight="Bold" Click="btn_Clear_Click" ></Button>
+
+                <Button Name="btn_Export" Width="55" Margin="2,10,2,10" FontSize="14" FontWeight="Bold" Content="Export" Click="btn_Export_Click" DockPanel.Dock="Right" ToolTip="Export ingredient shopping list to document"></Button>
+                
             </DockPanel>
         </StackPanel>
     </Grid>

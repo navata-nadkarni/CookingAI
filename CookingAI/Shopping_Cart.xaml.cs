@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,10 +25,12 @@ namespace CookingAI
     {
         ObservableCollection<Ingredient> _shoppingCartOptions = new ObservableCollection<Ingredient>();
         Boolean _initialState;
+        Ingredient tempIngredient=new Ingredient();
         public Shopping_Cart()
         {
-            InitializeComponent();
             _initialState = false;
+            InitializeComponent();
+           
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -39,8 +42,15 @@ namespace CookingAI
 
         private void initializeWindow()
         {
-            setControls();
+            
             lview_Ingredients.ItemsSource = App._shoppingCart;
+            setControls();
+            refreshData();
+            cbox_AddIngredients.ItemsSource = _shoppingCartOptions;
+        }
+
+        private void refreshData()
+        {
             foreach (Ingredient item in App._allIngredients)
             {
                 _shoppingCartOptions.Add(item);
@@ -55,12 +65,11 @@ namespace CookingAI
                 if (temp != null)
                     _shoppingCartOptions.Remove(temp);
             }
-            cbox_AddIngredients.ItemsSource = _shoppingCartOptions;
         }
 
         private void setControls()
         {
-            if (App._shoppingCart.Count == 0)
+            if (lview_Ingredients.Items.Count==0)
             {
                 btn_Edit.IsEnabled = false;
                 btn_Remove.IsEnabled = false;
@@ -101,6 +110,7 @@ namespace CookingAI
                 ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
                 _shoppingCartOptions.Add((Ingredient)lview_Ingredients.SelectedItem);
                 App._shoppingCart.Remove((Ingredient)lview_Ingredients.SelectedItem);
+                lview_Ingredients.ItemsSource = App._shoppingCart;
                 setControls();
             }
             else
@@ -111,6 +121,7 @@ namespace CookingAI
 
         private void btn_Add_Click(object sender, RoutedEventArgs e)
         {
+            tblock_errorMessage.Text = string.Empty;
             AddIngredients();
         }
 
@@ -145,9 +156,17 @@ namespace CookingAI
 
         private void Edit_Ingredient()
         {
+            tblock_errorMessage.Text = string.Empty;
             if (lview_Ingredients.SelectedItem != null)
             {
-
+                tempIngredient = new Ingredient
+                {
+                    IngredientName = ((Ingredient)lview_Ingredients.SelectedItem).IngredientName,
+                    IngredientQty = ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty,
+                    QuantityUnit = ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit
+                };
+                App.refreshData();
+                cbox_AddIngredients.ItemsSource = null;
                 cbox_AddIngredients.ItemsSource = lview_Ingredients.ItemsSource;
                 cbox_AddIngredients.SelectedItem = lview_Ingredients.SelectedItem;
                 cbox_AddIngredients.IsEnabled = false;
@@ -159,18 +178,54 @@ namespace CookingAI
 
         private void btn_cancel_Click(object sender, RoutedEventArgs e)
         {
+            if (lview_Ingredients.SelectedItem != null)
+            {
+                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = tempIngredient.IngredientQty;
+                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = tempIngredient.QuantityUnit;
+                lview_Ingredients.ItemsSource = null;
+                lview_Ingredients.ItemsSource = App._shoppingCart;
+                refreshData();
+            }
+
             popup_AddNew.IsOpen = false;
         }
 
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
-            Ingredient ingredientTemp = App._shoppingCart.SingleOrDefault(sc => sc.IngredientName.Equals(((Ingredient)cbox_AddIngredients.SelectedItem).IngredientName));
-            if(ingredientTemp==null)
-                App._shoppingCart.Add((Ingredient)cbox_AddIngredients.SelectedItem);
+            Regex check_input = new Regex(@"^[1-9][0-9]*$");
+            if (cbox_AddIngredients.SelectedIndex != -1 && check_input.IsMatch(tbox_qty.Text))
+            {
+                Ingredient ingredientTemp = App._shoppingCart.SingleOrDefault(sc => sc.IngredientName.Equals(((Ingredient)cbox_AddIngredients.SelectedItem).IngredientName));
+                if (ingredientTemp == null)
+                {
+                    App._shoppingCart.Add((Ingredient)cbox_AddIngredients.SelectedItem);
+                    MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
+                }
+                    
 
-            _shoppingCartOptions.Remove((Ingredient)cbox_AddIngredients.SelectedItem);
-            setControls();
-            popup_AddNew.IsOpen = false;
+                _shoppingCartOptions.Remove((Ingredient)cbox_AddIngredients.SelectedItem);
+                lview_Ingredients.ItemsSource = App._shoppingCart;
+                setControls();
+                popup_AddNew.IsOpen = false;
+            }
+            else
+            {
+                tblock_errorMessage.Foreground = Brushes.Red;
+                tblock_errorMessage.Visibility = Visibility.Visible;
+                if (cbox_AddIngredients.Text == string.Empty || tbox_qty.Text == string.Empty)
+                {
+                    tblock_errorMessage.Text = "Please enter all the ingredient details";
+                }
+                else if (!(check_input.IsMatch(tbox_qty.Text)))
+                {
+                    tblock_errorMessage.Text = "Quantity is not valid";
+                }
+                else
+                {
+                    tblock_errorMessage.Text = "Ingredient does not exist";
+                }
+            }
+            
         }
 
         private void tbox_Filter_TextChanged(object sender, TextChangedEventArgs e)
@@ -183,6 +238,7 @@ namespace CookingAI
                     var elements_contain = (from i in App._shoppingCart where i.IngredientName.ToLower().Contains(tbox_Filter.Text.ToLower()) select i).ToList();
                     elements.AddRange(elements_contain);
                     lview_Ingredients.ItemsSource = elements.Distinct();
+                    setControls();
                 }
             }
             _initialState = true;
@@ -199,7 +255,7 @@ namespace CookingAI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
-            Owner.Show();
+           // Owner.Show();
         }
 
         private void btn_Export_Click(object sender, RoutedEventArgs e)
@@ -228,6 +284,12 @@ namespace CookingAI
             App._shoppingCart.Clear();
             initializeWindow();
 
+        }
+
+        private void btn_back_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            App.goBack();
         }
     }
 }
