@@ -59,8 +59,15 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </DockPanel>
-            <DockPanel HorizontalAlignment="Right">
-                <Button Name="btn_Add" Width="120" Margin="10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold">Add Ingredient</Button>
+            <DockPanel LastChildFill="False">
+                <Button Name="btn_back" Width="100" Margin="10" FontSize="14" FontWeight="Bold" DockPanel.Dock="left" Click="btn_back_Click">Back</Button>
+               
+                <Button Name="btn_Remove" Content="Remove Ingredient" Width="140" Margin="10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold" ToolTip="Remove ingredient from the available ingredient list" DockPanel.Dock="Right"></Button>
+                
+                <Button Name="btn_Edit" Content="Edit Ingredient" Width="120" Margin="10" FontSize="14" FontWeight="Bold" Click="btn_Edit_Click" ToolTip="Edit the quantities of the ingredients you have" DockPanel.Dock="Right"></Button>
+                
+                <Button Name="btn_Add" Width="120" Margin="10" Click="btn_Add_Click" FontSize="14" FontWeight="Bold" ToolTip="Add ingredients you have, that are not updated in available ingredients list" DockPanel.Dock="Right">Add Ingredient</Button>
+                
                 <StackPanel>
                     <Popup Name="popup_AddNew" VerticalAlignment="Center" HorizontalAlignment="Center" PlacementTarget="{Binding ElementName=lview_Ingredients}" AllowsTransparency="True" Placement="Center">
                         <Border BorderThickness="2" BorderBrush="black">
@@ -79,15 +86,15 @@
                                     <TextBox Name="tbox_unit" Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding QuantityUnit}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Right">
-                                    <Button Name="btn_Save" Content="Save" Margin="5" Click="btn_Save_Click" FontSize="12" FontWeight="Bold" ></Button>
+                                    <Button Name="btn_Save" Content="Save" Margin="5" Click="btn_Save_Click" FontSize="12" FontWeight="Bold"></Button>
                                     <Button Name="btn_cancel" Content="Cancel" Margin="5" Click="btn_cancel_Click" FontSize="12" FontWeight="Bold"></Button>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
                     </Popup>
                 </StackPanel>
-                <Button Name="btn_Edit" Content="Edit Ingredient" Width="120" Margin="10" FontSize="14" FontWeight="Bold" Click="btn_Edit_Click"></Button>
-                <Button Name="btn_Remove" Content="Remove Ingredient" Width="140" Margin="10" Click="btn_Remove_Click" FontSize="14" FontWeight="Bold"></Button>
+
+
             </DockPanel>
         </StackPanel>
     </Grid>

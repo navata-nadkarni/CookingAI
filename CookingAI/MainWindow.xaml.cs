@@ -13,7 +13,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CookingAI
@@ -33,6 +32,7 @@ namespace CookingAI
         int portionSize;
         //Boolean initialState = false;
         List<Recipe> recipeItemSource;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -95,6 +95,7 @@ namespace CookingAI
 
         private void initializeWindow()
         {
+            
             goToHomeWindow();
             recipeItemSource = new List<Recipe>(App._recipes);
             recipeItemSource.Add(new Recipe { RecipeName = "Add new Recipe" });
@@ -292,11 +293,11 @@ namespace CookingAI
         {
             Manage_Ingredients manageIngredients = new Manage_Ingredients();
             manageIngredients.Owner = this;
+            Application.Current.Resources["selectedItem"] =(Recipe)cbox_meals.SelectedItem ;
+            Application.Current.Resources["noOfPersons"] = tbox_Servings.Text;
             //this.Visibility = Visibility.Hidden;
-            manageIngredients.ShowDialog();
-            btn_updateRec.Visibility = Visibility.Hidden;
-            btn_addToCart.Visibility = Visibility.Hidden;
-            initializeWindow();
+            manageIngredients.Show();
+            //initializeWindow();
         }
 
         private void btn_Home_Click(object sender, RoutedEventArgs e)

@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CookingAI
@@ -121,7 +123,7 @@ namespace CookingAI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MyStorage.storeXML<ObservableCollection<Ingredient>>(App._ingredients, "ingredients.xml");
-            Owner.Show();
+           // Owner.Show();
         }
 
         private void tbox_Filter_TextChanged(object sender, TextChangedEventArgs e)
@@ -218,6 +220,20 @@ namespace CookingAI
                 tbox_Filter.Text = "Filter for Available ingredients";
                 tbox_Filter.Foreground = Brushes.DarkGray;
             }
+            
+        }
+
+        private void btn_back_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            this.Close();
+            mainWindow.Show();
+            mainWindow.InitializeComponent();
+            mainWindow.cbox_meals.SelectedItem = (Recipe)Application.Current.Resources["selectedItem"];
+            mainWindow.tbox_Servings.Text = Application.Current.Resources["noOfPersons"].ToString();
+            mainWindow.btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            
+            
             
         }
     }
