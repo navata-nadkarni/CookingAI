@@ -53,7 +53,7 @@ namespace CookingAI
 
         private void addIngredients()
         {
-            //_localIngredients = new List<Ingredient>(App._ingredients);
+           //_localIngredients = new List<Ingredient>(App._ingredients);
             tblock_errorMessage.Text = string.Empty;
             _localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false; i.QuantityUnit = string.Empty; });
             cbox_AddIngredients.SelectedIndex = -1;
@@ -85,12 +85,12 @@ namespace CookingAI
             Regex check_input = new Regex(@"^[1-9][0-9]*$");
             if (cbox_AddIngredients.SelectedIndex != -1 && check_input.IsMatch(tbox_qty.Text))
             {
+                _localIngredients.Remove((Ingredient)cbox_AddIngredients.SelectedItem);
                 Ingredient ingredientTemp = _recipeIngredients.SingleOrDefault(sc => sc.IngredientName.Equals(((Ingredient)cbox_AddIngredients.SelectedItem).IngredientName));
                 if (ingredientTemp == null)
                 {
                     _recipeIngredients.Add((Ingredient)cbox_AddIngredients.SelectedItem);
                 }
-                _localIngredients.Remove((Ingredient)cbox_AddIngredients.SelectedItem);
                 lview_Ingredients.ItemsSource = _recipeIngredients;
                 popup_AddNew.IsOpen = false;
                 setControls();
@@ -186,6 +186,7 @@ namespace CookingAI
         {
             Owner.Hide();
             setControls();
+            
             _localIngredients = App._ingredients.Select(i => new Ingredient { IngredientName = i.IngredientName, IngredientQty = 0, QuantityUnit = string.Empty, IsOptional = false }).ToList();
             lview_Ingredients.ItemsSource = _recipeIngredients;
         }
