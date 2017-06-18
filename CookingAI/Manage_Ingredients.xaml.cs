@@ -44,13 +44,23 @@ namespace CookingAI
             Owner.Hide();
 
             lview_Ingredients.ItemsSource = App._availableIngredients;
-            if (App._availableIngredients==null)
+            setControls();
+            cbox_AddIngredients.ItemsSource = App._availableIngredients;
+
+        }
+
+        private void setControls()
+        {
+            if (lview_Ingredients.Items.Count==0)
             {
                 btn_Edit.IsEnabled = false;
                 btn_Remove.IsEnabled = false;
             }
-            cbox_AddIngredients.ItemsSource = App._availableIngredients;
-
+            else
+            {
+                btn_Edit.IsEnabled = true;
+                btn_Remove.IsEnabled = true;
+            }
         }
 
         private void cbox_AddIngredients_KeyUp(object sender, KeyEventArgs e)
@@ -164,6 +174,7 @@ namespace CookingAI
                     var elements_contain = (from i in App._availableIngredients where i.IngredientName.ToLower().Contains(tbox_Filter.Text.ToLower()) select i).ToList();
                     elements.AddRange(elements_contain);
                     lview_Ingredients.ItemsSource = elements.Distinct();
+                    setControls();
                     cbox_AddIngredients.IsDropDownOpen = true;
                 }
             }
