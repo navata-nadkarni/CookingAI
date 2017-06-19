@@ -23,10 +23,10 @@ namespace CookingAI
     public partial class MainWindow : Window
     {
         #region global variables
-        List<Ingredient> ingredientsAbsent=new List<Ingredient>();
-        List<Ingredient> ingredientsPresent = new List<Ingredient>();
-        int portionSize;
-        List<Recipe> recipeItemSource;
+        List<Ingredient> _ingredientsAbsent=new List<Ingredient>();
+        List<Ingredient> _ingredientsPresent = new List<Ingredient>();
+        int _portionSize;
+        List<Recipe> _recipeItemSource;
         #endregion
 
         #region constructor for window
@@ -56,12 +56,12 @@ namespace CookingAI
                 {
                     spanel_Home.Visibility = Visibility.Hidden;
                     spanel_Result.Visibility = Visibility.Visible;
-                    ingredientsAbsent = new List<Ingredient>();
-                    ingredientsPresent = new List<Ingredient>();
+                    _ingredientsAbsent = new List<Ingredient>();
+                    _ingredientsPresent = new List<Ingredient>();
 
                     checkIfPossible((Recipe)cbox_meals.SelectedItem);
                     lbox_ingredientsRequired.ItemsSource = ((Recipe)cbox_meals.SelectedItem).RequiredIngredients;
-                    if (ingredientsAbsent.Count == 0)
+                    if (_ingredientsAbsent.Count == 0)
                     {
                        
                         tblock_result.Text = "It is possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
@@ -72,7 +72,7 @@ namespace CookingAI
                     }
                     else
                     {
-                        if (ingredientsAbsent.Any(i => i.IsOptional.Equals(false)))
+                        if (_ingredientsAbsent.Any(i => i.IsOptional.Equals(false)))
                         {
                             tblock_result.Text = "It is not possible for you to make " + ((Recipe)cbox_meals.SelectedItem).RecipeName.ToString() + " for ";
                             btn_updateRec.Visibility = Visibility.Hidden;
@@ -84,7 +84,7 @@ namespace CookingAI
                             btn_updateRec.Visibility = Visibility.Visible;
                         }
                         spanel_headMissing.Visibility = Visibility.Visible;
-                        lbox_MissingIngredients.ItemsSource = ingredientsAbsent;
+                        lbox_MissingIngredients.ItemsSource = _ingredientsAbsent;
                         spanel_headMissing.Visibility = Visibility.Visible;
                         lbox_MissingIngredients.Visibility = Visibility.Visible;
                         btn_addToCart.Visibility = Visibility.Visible;
@@ -128,7 +128,7 @@ namespace CookingAI
         private void btn_addToCart_Click(object sender, RoutedEventArgs e)
         {
 
-            foreach (Ingredient missingIngredient in ingredientsAbsent)
+            foreach (Ingredient missingIngredient in _ingredientsAbsent)
             {
                 if (App._shoppingCart != null)
                 {
@@ -202,7 +202,7 @@ namespace CookingAI
 
         private void btn_updateRec_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Ingredient item in ingredientsPresent)
+            foreach (Ingredient item in _ingredientsPresent)
             {
                 Ingredient temp = App._availableIngredients.SingleOrDefault(i => i.IngredientName.Equals(item.IngredientName));
                 if (temp != null)
@@ -225,16 +225,16 @@ namespace CookingAI
         private void initializeWindow()
         {
             goToHomeWindow();
-            recipeItemSource = new List<Recipe>(App._recipes);
-            recipeItemSource.Add(new Recipe { RecipeName = "Add new Recipe" });
-            cbox_meals.ItemsSource = recipeItemSource;
+            _recipeItemSource = new List<Recipe>(App._recipes);
+            _recipeItemSource.Add(new Recipe { RecipeName = "Add new Recipe" });
+            cbox_meals.ItemsSource = _recipeItemSource;
             tbox_Servings.Text = "1";
         }
 
         //implements depth first search to find out if it is possible to make a recipe or not.
         private void checkIfPossible(Recipe selectedRecipe)
         {
-            portionSize = int.Parse(tbox_Servings.Text.ToString());
+            _portionSize = int.Parse(tbox_Servings.Text.ToString());
             Ingredient ingredientToCheck = new Ingredient();
             Ingredient ingredientTemp;
             foreach (Ingredient requiredIngredient in selectedRecipe.RequiredIngredients)
@@ -242,19 +242,19 @@ namespace CookingAI
                 ingredientToCheck = App._availableIngredients.SingleOrDefault(i => i.IngredientName.Equals(requiredIngredient.IngredientName));
                 if (!(ingredientToCheck == null))
                 {
-                    if (ingredientToCheck.IngredientQty >= (requiredIngredient.IngredientQty * portionSize))
+                    if (ingredientToCheck.IngredientQty >= (requiredIngredient.IngredientQty * _portionSize))
                     {
-                        ingredientsPresent.Add(requiredIngredient);
+                        _ingredientsPresent.Add(requiredIngredient);
                     }
                     else
                     {
                         ingredientTemp = new Ingredient();
                         ingredientTemp.IngredientName = requiredIngredient.IngredientName.ToString();
-                        ingredientTemp.IngredientQty = (requiredIngredient.IngredientQty * portionSize) - ingredientToCheck.IngredientQty;
+                        ingredientTemp.IngredientQty = (requiredIngredient.IngredientQty * _portionSize) - ingredientToCheck.IngredientQty;
                         ingredientTemp.QuantityUnit = requiredIngredient.QuantityUnit;
                         ingredientTemp.IsOptional = requiredIngredient.IsOptional;
 
-                        ingredientsAbsent.Add(ingredientTemp);
+                        _ingredientsAbsent.Add(ingredientTemp);
                     }
 
                 }
@@ -265,11 +265,11 @@ namespace CookingAI
                     {
                         ingredientTemp = new Ingredient();
                         ingredientTemp.IngredientName = requiredIngredient.IngredientName.ToString();
-                        ingredientTemp.IngredientQty = requiredIngredient.IngredientQty * portionSize;
+                        ingredientTemp.IngredientQty = requiredIngredient.IngredientQty * _portionSize;
                         ingredientTemp.QuantityUnit = requiredIngredient.QuantityUnit;
                         ingredientTemp.IsOptional = requiredIngredient.IsOptional;
 
-                        ingredientsAbsent.Add(ingredientTemp);
+                        _ingredientsAbsent.Add(ingredientTemp);
                     }
                     else
                     {

@@ -20,7 +20,6 @@ namespace CookingAI
         public static ObservableCollection<Ingredient> _availableIngredients;
         public static ObservableCollection<Ingredient> _allIngredients;
         public static ObservableCollection<Ingredient> _shoppingCart = new ObservableCollection<Ingredient>();
-        //public static ObservableCollection<Ingredient> _missingIngredients;
 
         public App()
         {
@@ -32,9 +31,9 @@ namespace CookingAI
             _availableIngredients = new ObservableCollection<Ingredient>((from i in _ingredients where i.IngredientQty != 0 select i).ToList());
             _allIngredients = new ObservableCollection<Ingredient>((from i in _ingredients where i.IngredientQty == 0 select i).ToList());
         }
+
         public static void refreshDataFromXML()
         {
-            //_missingIngredients = MyStorage.readXML<ObservableCollection<Ingredient>>("shopping_cart.xml");
             _recipes = MyStorage.readXML<List<Recipe>>("recipes.xml");
             _ingredients = MyStorage.readXML<ObservableCollection<Ingredient>>("ingredients.xml");
             _shoppingCart = MyStorage.readXML<ObservableCollection<Ingredient>>("shoppingCart.xml");

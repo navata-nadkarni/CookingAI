@@ -69,17 +69,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BoolToColourConverter.cs" />
-    <Compile Include="InvertBooleanConverter.cs" />
+    <Compile Include="Converters\BoolToColourConverter.cs" />
+    <Compile Include="Converters\InvertBooleanConverter.cs" />
     <Compile Include="Manage_Ingredients.xaml.cs">
       <DependentUpon>Manage_Ingredients.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MultiplyConverter.cs" />
-    <Compile Include="MyStorage.cs" />
+    <Compile Include="Converters\MultiplyConverter.cs" />
+    <Compile Include="Storage Class\MyStorage.cs" />
     <Compile Include="NewRecipe.xaml.cs">
       <DependentUpon>NewRecipe.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Recipe.cs" />
+    <Compile Include="Classes\Recipe.cs" />
     <Compile Include="Shopping_Cart.xaml.cs">
       <DependentUpon>Shopping_Cart.xaml</DependentUpon>
     </Compile>
@@ -91,7 +91,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Ingredient.cs" />
+    <Compile Include="Classes\Ingredient.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

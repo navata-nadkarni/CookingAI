@@ -22,53 +22,66 @@ namespace CookingAI
     /// </summary>
     public partial class NewRecipe : Window
     {
-        List<Ingredient> _localIngredients;
-        Ingredient tempIngredient = new Ingredient();
-        ObservableCollection<Ingredient> _recipeIngredients = new ObservableCollection<Ingredient>();
-        public NewRecipe()
+
+        #region global variables 
+            List<Ingredient> _localIngredients;
+            Ingredient _tempIngredient = new Ingredient();
+            ObservableCollection<Ingredient> _recipeIngredients = new ObservableCollection<Ingredient>();
+        #endregion
+
+        #region constructor
+
+            public NewRecipe()
         {
             InitializeComponent();
         }
 
-        private void tbox_RecipeName_GotFocus(object sender, RoutedEventArgs e)
+        #endregion
+
+        #region events
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if(tbox_RecipeName.Text == "Enter Recipe Name")
-                tbox_RecipeName.Text = string.Empty;
-            tbox_RecipeName.Foreground = Brushes.Black;
+            Owner.Hide();
+            setControls();
+
+            _localIngredients = App._ingredients.Select(i => new Ingredient { IngredientName = i.IngredientName, IngredientQty = 0, QuantityUnit = string.Empty, IsOptional = false }).ToList();
+            lview_Ingredients.ItemsSource = _recipeIngredients;
         }
 
-        private void tbox_RecipeName_KeyUp(object sender, KeyEventArgs e)
+
+
+        private void tbox_RecipeName_LostFocus(object sender, RoutedEventArgs e)
         {
-            if(App._recipes.Any(i=>i.RecipeName.ToLower().Equals(tbox_RecipeName.Text.ToLower())))
+            if (tbox_RecipeName.Text == string.Empty)
             {
-                MessageBox.Show("This recipe already exists in our database","Warning");
+                tbox_RecipeName.Text = "Enter Recipe Name";
+                tbox_RecipeName.Foreground = Brushes.DarkGray;
             }
         }
 
-        private void btn_Add_Click(object sender, RoutedEventArgs e)
+        private void btn_SaveRecipe_Click(object sender, RoutedEventArgs e)
         {
-            addIngredients();
-            
+            if (tbox_RecipeName.Text == "Enter Recipe Name" || _recipeIngredients.Count == 0)
+                MessageBox.Show("Give all details of the recipe", "Warning");
+            else
+                saveRecipe();
         }
 
-        private void addIngredients()
+        private void lview_Ingredients_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-           //_localIngredients = new List<Ingredient>(App._ingredients);
-            tblock_errorMessage.Text = string.Empty;
-            _localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false; i.QuantityUnit = string.Empty; });
-            cbox_AddIngredients.SelectedIndex = -1;
-            cbox_AddIngredients.ItemsSource = null;
-            cbox_AddIngredients.ItemsSource = _localIngredients;
-            cbox_AddIngredients.IsEnabled = true;
-            popup_AddNew.IsOpen = true;
+            if (e.OriginalSource is TextBlock || e.OriginalSource is StackPanel || e.OriginalSource is Border)
+            {
+                editIngredients();
+            }
+
         }
 
         private void cbox_AddIngredients_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key==Key.Back || e.Key== Key.Delete)
+            if (e.Key == Key.Back || e.Key == Key.Delete)
             {
                 cbox_AddIngredients.SelectedIndex = -1;
-                //cbox_AddIngredients.IsDropDownOpen = false;
             }
             if (_localIngredients != null)
             {
@@ -78,6 +91,27 @@ namespace CookingAI
                 cbox_AddIngredients.ItemsSource = elements.Distinct();
                 cbox_AddIngredients.IsDropDownOpen = true;
             }
+        }
+
+        private void tbox_RecipeName_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (tbox_RecipeName.Text == "Enter Recipe Name")
+                tbox_RecipeName.Text = string.Empty;
+            tbox_RecipeName.Foreground = Brushes.Black;
+        }
+
+        private void tbox_RecipeName_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (App._recipes.Any(i => i.RecipeName.ToLower().Equals(tbox_RecipeName.Text.ToLower())))
+            {
+                MessageBox.Show("This recipe already exists in our database", "Warning");
+            }
+        }
+
+        private void btn_Add_Click(object sender, RoutedEventArgs e)
+        {
+            addIngredients();
+
         }
 
         private void btn_Save_Click(object sender, RoutedEventArgs e)
@@ -112,18 +146,15 @@ namespace CookingAI
                     tblock_errorMessage.Text = "Ingredient does not exist";
                 }
             }
-                
-            
-            
-            
+
         }
 
         private void btn_cancel_Click(object sender, RoutedEventArgs e)
         {
             if (lview_Ingredients.SelectedItem != null)
             {
-                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = tempIngredient.IngredientQty;
-                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = tempIngredient.QuantityUnit;
+                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = _tempIngredient.IngredientQty;
+                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = _tempIngredient.QuantityUnit;
                 lview_Ingredients.ItemsSource = null;
                 lview_Ingredients.ItemsSource = _recipeIngredients;
             }
@@ -142,13 +173,41 @@ namespace CookingAI
             }
             else
             {
-                MessageBox.Show("Please Select an ingredient","Warning");
+                MessageBox.Show("Please Select an ingredient", "Warning");
             }
         }
 
         private void btn_Edit_Click(object sender, RoutedEventArgs e)
         {
-            editIngredients();  
+            editIngredients();
+        }
+
+        private void btn_back_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Resources["isHome"] = true;
+            this.Close();
+            App.goBack();
+        }
+        
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MyStorage.storeXML<List<Recipe>>(App._recipes, "recipes.xml");
+
+        }
+
+        
+        #endregion
+
+        #region methods
+        private void addIngredients()
+        {
+            tblock_errorMessage.Text = string.Empty;
+            _localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false; i.QuantityUnit = string.Empty; });
+            cbox_AddIngredients.SelectedIndex = -1;
+            cbox_AddIngredients.ItemsSource = null;
+            cbox_AddIngredients.ItemsSource = _localIngredients;
+            cbox_AddIngredients.IsEnabled = true;
+            popup_AddNew.IsOpen = true;
         }
 
         private void editIngredients()
@@ -156,7 +215,7 @@ namespace CookingAI
             tblock_errorMessage.Text = string.Empty;
             if (lview_Ingredients.SelectedItem != null)
             {
-                tempIngredient = new Ingredient
+                _tempIngredient = new Ingredient
                 {
                     IngredientName = ((Ingredient)lview_Ingredients.SelectedItem).IngredientName,
                     IngredientQty = ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty,
@@ -170,30 +229,12 @@ namespace CookingAI
                 popup_AddNew.IsOpen = true;
             }
             else
-                MessageBox.Show("Please Select an ingredient","Warning");
-        }
-
-        private void lview_Ingredients_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.OriginalSource is TextBlock || e.OriginalSource is StackPanel || e.OriginalSource is Border)
-            {
-                editIngredients();
-            }
-            
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            Owner.Hide();
-            setControls();
-            
-            _localIngredients = App._ingredients.Select(i => new Ingredient { IngredientName = i.IngredientName, IngredientQty = 0, QuantityUnit = string.Empty, IsOptional = false }).ToList();
-            lview_Ingredients.ItemsSource = _recipeIngredients;
+                MessageBox.Show("Please Select an ingredient", "Warning");
         }
 
         private void setControls()
         {
-            if(_recipeIngredients.Count==0)
+            if (_recipeIngredients.Count == 0)
             {
                 btn_Edit.IsEnabled = false;
                 btn_Remove.IsEnabled = false;
@@ -207,45 +248,14 @@ namespace CookingAI
             }
         }
 
-        private void tbox_RecipeName_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if(tbox_RecipeName.Text==string.Empty)
-            {
-                tbox_RecipeName.Text = "Enter Recipe Name";
-                tbox_RecipeName.Foreground = Brushes.DarkGray;
-            }
-        }
-
-        private void btn_SaveRecipe_Click(object sender, RoutedEventArgs e)
-        {
-            if (tbox_RecipeName.Text == "Enter Recipe Name" || _recipeIngredients.Count == 0)
-                MessageBox.Show("Give all details of the recipe","Warning");
-            else
-                SaveRecipe();
-        }
-
-        private void SaveRecipe()
+        private void saveRecipe()
         {
             List<Ingredient> finalIngredientList = new List<Ingredient>(_recipeIngredients);
-            App._recipes.Add(new Recipe { RecipeID = App._recipes.Count+1, RecipeName = tbox_RecipeName.Text, RequiredIngredients = finalIngredientList });
-            MessageBox.Show("New recipe successfully added","Success");
+            App._recipes.Add(new Recipe { RecipeID = App._recipes.Count + 1, RecipeName = tbox_RecipeName.Text, RequiredIngredients = finalIngredientList });
+            MessageBox.Show("New recipe successfully added", "Success");
             btn_back.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-
-           // mainWindow.btn_Check.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
+        #endregion
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            MyStorage.storeXML<List<Recipe>>(App._recipes, "recipes.xml");
-            //this.Close();
-            //Owner.Show();
-        }
-
-        private void btn_back_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Resources["isHome"]= true;
-            this.Close();
-            App.goBack();
-        }
     }
 }

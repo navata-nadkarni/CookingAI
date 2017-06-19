@@ -23,83 +23,27 @@ namespace CookingAI
     /// </summary>
     public partial class Shopping_Cart : Window
     {
-        ObservableCollection<Ingredient> _shoppingCartOptions = new ObservableCollection<Ingredient>();
-        Boolean _initialState;
-        Ingredient tempIngredient=new Ingredient();
+        #region global variables
+        ObservableCollection<Ingredient> _shoppingCartOptions;
+            Boolean _initialState;
+            Ingredient _tempIngredient = new Ingredient();
+        #endregion
+
+        #region constructor
         public Shopping_Cart()
         {
             _initialState = false;
             InitializeComponent();
            
         }
+        #endregion
 
+        #region events
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Owner.Hide();
             initializeWindow();
             
-        }
-
-        private void initializeWindow()
-        {
-            
-            lview_Ingredients.ItemsSource = App._shoppingCart;
-            setControls();
-            refreshData();
-            cbox_AddIngredients.ItemsSource = _shoppingCartOptions;
-        }
-
-        private void refreshData()
-        {
-            foreach (Ingredient item in App._allIngredients)
-            {
-                _shoppingCartOptions.Add(item);
-            }
-
-            //_shoppingCartOptions = ((ObservableCollection<Ingredient>)_shoppingCartOptions.Where(x => !App._shoppingCart.Any(y => y.IngredientName == x.IngredientName)));
-
-            foreach (Ingredient item in App._shoppingCart)
-            {
-                Ingredient temp = _shoppingCartOptions.SingleOrDefault(i => i.IngredientName.Equals(item.IngredientName));
-                // Ingredient temp = (Ingredient)from i in _shoppingCartOptions where i.IngredientName == item.IngredientName select i;
-                if (temp != null)
-                    _shoppingCartOptions.Remove(temp);
-            }
-        }
-
-        private void setControls()
-        {
-            if (lview_Ingredients.Items.Count==0)
-            {
-                btn_Edit.IsEnabled = false;
-                btn_Remove.IsEnabled = false;
-                btn_Export.IsEnabled = false;
-                btn_Clear.IsEnabled = false;
-            }
-            else
-            {
-                btn_Edit.IsEnabled = true;
-                btn_Remove.IsEnabled = true;
-                btn_Export.IsEnabled = true;
-                btn_Clear.IsEnabled = true;
-            }
-        }
-
-        private void cbox_AddIngredients_KeyUp(object sender, KeyEventArgs e)
-        {
-            if(e.Key==Key.Back|| e.Key==Key.Delete )
-            {
-                cbox_AddIngredients.SelectedIndex = -1;
-                //cbox_AddIngredients.IsDropDownOpen = false;
-            }
-            if (App._allIngredients != null)
-            {
-                var elements = (from i in _shoppingCartOptions where i.IngredientName.StartsWith(cbox_AddIngredients.Text, StringComparison.InvariantCultureIgnoreCase) select i).ToList();
-                var elements_contain = (from i in _shoppingCartOptions where i.IngredientName.ToLower().Contains(cbox_AddIngredients.Text.ToLower()) select i).ToList();
-                elements.AddRange(elements_contain);
-                cbox_AddIngredients.ItemsSource = elements.Distinct();
-                cbox_AddIngredients.IsDropDownOpen = true;
-            }
         }
 
         private void btn_Remove_Click(object sender, RoutedEventArgs e)
@@ -115,22 +59,30 @@ namespace CookingAI
             }
             else
             {
-                MessageBox.Show("Please Select an ingredient");
+                MessageBox.Show("Please Select an ingredient", "Warning");
             }
         }
 
         private void btn_Add_Click(object sender, RoutedEventArgs e)
         {
             tblock_errorMessage.Text = string.Empty;
-            AddIngredients();
+            addIngredients();
         }
 
-        private void AddIngredients()
+        private void cbox_AddIngredients_KeyUp(object sender, KeyEventArgs e)
         {
-            cbox_AddIngredients.SelectedIndex = -1;
-            cbox_AddIngredients.ItemsSource = _shoppingCartOptions;
-            cbox_AddIngredients.IsEnabled = true;
-            popup_AddNew.IsOpen = true;
+            if (e.Key == Key.Back || e.Key == Key.Delete)
+            {
+                cbox_AddIngredients.SelectedIndex = -1;
+            }
+            if (App._allIngredients != null)
+            {
+                var elements = (from i in _shoppingCartOptions where i.IngredientName.StartsWith(cbox_AddIngredients.Text, StringComparison.InvariantCultureIgnoreCase) select i).ToList();
+                var elements_contain = (from i in _shoppingCartOptions where i.IngredientName.ToLower().Contains(cbox_AddIngredients.Text.ToLower()) select i).ToList();
+                elements.AddRange(elements_contain);
+                cbox_AddIngredients.ItemsSource = elements.Distinct();
+                cbox_AddIngredients.IsDropDownOpen = true;
+            }
         }
 
         private void tbox_Filter_GotFocus(object sender, RoutedEventArgs e)
@@ -151,40 +103,17 @@ namespace CookingAI
 
         private void btn_Edit_Click(object sender, RoutedEventArgs e)
         {
-            Edit_Ingredient();
-        }
-
-        private void Edit_Ingredient()
-        {
-            tblock_errorMessage.Text = string.Empty;
-            if (lview_Ingredients.SelectedItem != null)
-            {
-                tempIngredient = new Ingredient
-                {
-                    IngredientName = ((Ingredient)lview_Ingredients.SelectedItem).IngredientName,
-                    IngredientQty = ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty,
-                    QuantityUnit = ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit
-                };
-                App.refreshData();
-                cbox_AddIngredients.ItemsSource = null;
-                cbox_AddIngredients.ItemsSource = lview_Ingredients.ItemsSource;
-                cbox_AddIngredients.SelectedItem = lview_Ingredients.SelectedItem;
-                cbox_AddIngredients.IsEnabled = false;
-                popup_AddNew.IsOpen = true;
-            }
-            else
-                MessageBox.Show("Please Select an ingredient! ");
+            editIngredient();
         }
 
         private void btn_cancel_Click(object sender, RoutedEventArgs e)
         {
             if (lview_Ingredients.SelectedItem != null)
             {
-                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = tempIngredient.IngredientQty;
-                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = tempIngredient.QuantityUnit;
+                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = _tempIngredient.IngredientQty;
+                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = _tempIngredient.QuantityUnit;
                 lview_Ingredients.ItemsSource = null;
                 lview_Ingredients.ItemsSource = App._shoppingCart;
-                refreshData();
             }
 
             popup_AddNew.IsOpen = false;
@@ -199,7 +128,7 @@ namespace CookingAI
                 if (ingredientTemp == null)
                 {
                     App._shoppingCart.Add((Ingredient)cbox_AddIngredients.SelectedItem);
-                   // MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
+
                 }
                 _shoppingCartOptions.Remove((Ingredient)cbox_AddIngredients.SelectedItem);
                 lview_Ingredients.ItemsSource = App._shoppingCart;
@@ -223,7 +152,7 @@ namespace CookingAI
                     tblock_errorMessage.Text = "Ingredient does not exist";
                 }
             }
-            
+
         }
 
         private void tbox_Filter_TextChanged(object sender, TextChangedEventArgs e)
@@ -246,14 +175,8 @@ namespace CookingAI
         {
             if (e.OriginalSource is TextBlock || e.OriginalSource is StackPanel || e.OriginalSource is Border)
             {
-                Edit_Ingredient();
+                editIngredient();
             }
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
-           // Owner.Show();
         }
 
         private void btn_Export_Click(object sender, RoutedEventArgs e)
@@ -267,6 +190,116 @@ namespace CookingAI
                 File.WriteAllText(saveFileDialog.FileName, text.ToString());
         }
 
+        private void btn_Clear_Click(object sender, RoutedEventArgs e)
+        {
+            /*if (lview_Ingredients.SelectedItem != null)
+            {
+                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = 0;
+                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
+                _shoppingCartOptions.Add((Ingredient)lview_Ingredients.SelectedItem);
+                App._shoppingCart.Remove((Ingredient)lview_Ingredients.SelectedItem);
+                lview_Ingredients.ItemsSource = App._shoppingCart;
+                setControls();
+            }*/
+
+
+            App._shoppingCart.Clear();
+            refreshData();
+            initializeWindow();
+
+        }
+
+        private void btn_back_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            App.goBack();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MyStorage.storeXML<ObservableCollection<Ingredient>>(App._shoppingCart, "shoppingCart.xml");
+        }
+        #endregion
+
+        #region methods
+        private void initializeWindow()
+        {
+            
+            lview_Ingredients.ItemsSource = App._shoppingCart;
+            setControls();
+            refreshData();
+            cbox_AddIngredients.ItemsSource = _shoppingCartOptions;
+        }
+
+        private void refreshData()
+        {
+            _shoppingCartOptions = new ObservableCollection<Ingredient>();
+            foreach (Ingredient item in App._allIngredients)
+            {
+                item.IngredientQty = 0;
+                item.QuantityUnit = string.Empty;
+                _shoppingCartOptions.Add(item);
+            }
+
+
+            foreach (Ingredient item in App._shoppingCart)
+            {
+                Ingredient temp = _shoppingCartOptions.SingleOrDefault(i => i.IngredientName.Equals(item.IngredientName));
+
+                if (temp != null)
+                    _shoppingCartOptions.Remove(temp);
+            }
+        }
+
+        private void setControls()
+        {
+            if (lview_Ingredients.Items.Count == 0)
+            {
+                btn_Edit.IsEnabled = false;
+                btn_Remove.IsEnabled = false;
+                btn_Export.IsEnabled = false;
+                btn_Clear.IsEnabled = false;
+            }
+            else
+            {
+                btn_Edit.IsEnabled = true;
+                btn_Remove.IsEnabled = true;
+                btn_Export.IsEnabled = true;
+                btn_Clear.IsEnabled = true;
+            }
+        }
+
+        private void addIngredients()
+        {
+            cbox_AddIngredients.SelectedIndex = -1;
+            cbox_AddIngredients.ItemsSource = null;
+            cbox_AddIngredients.ItemsSource = _shoppingCartOptions;
+            cbox_AddIngredients.IsEnabled = true;
+            popup_AddNew.IsOpen = true;
+        }
+
+        private void editIngredient()
+        {
+            tblock_errorMessage.Text = string.Empty;
+            if (lview_Ingredients.SelectedItem != null)
+            {
+                _tempIngredient = new Ingredient
+                {
+                    IngredientName = ((Ingredient)lview_Ingredients.SelectedItem).IngredientName,
+                    IngredientQty = ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty,
+                    QuantityUnit = ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit
+                };
+                App.refreshData();
+                cbox_AddIngredients.ItemsSource = null;
+                cbox_AddIngredients.ItemsSource = lview_Ingredients.ItemsSource;
+                cbox_AddIngredients.SelectedItem = lview_Ingredients.SelectedItem;
+                cbox_AddIngredients.IsEnabled = false;
+                popup_AddNew.IsOpen = true;
+            }
+            else
+                MessageBox.Show("Please Select an ingredient! ", "Warning");
+        }
+
         private string getTextToBeExported()
         {
             StringBuilder sbObj = new StringBuilder();
@@ -277,17 +310,7 @@ namespace CookingAI
             return sbObj.ToString();
         }
 
-        private void btn_Clear_Click(object sender, RoutedEventArgs e)
-        {
-            App._shoppingCart.Clear();
-            initializeWindow();
 
-        }
-
-        private void btn_back_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-            App.goBack();
-        }
+        #endregion
     }
 }
