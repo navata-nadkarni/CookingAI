@@ -67,16 +67,15 @@
                         <DockPanel DockPanel.Dock="Top">
                             <TextBlock Name="tblock_result" Margin="10,5,5,5" VerticalAlignment="Center" FontSize="14"></TextBlock>
                             <StackPanel Name="spanel_portionStack" Orientation="Horizontal" DockPanel.Dock="Left">
-                                <TextBox Name="tbox_resultPortion" Margin="0,5,5,5" Width="50" HorizontalContentAlignment="Center" Text="{Binding ElementName=tbox_Servings,Path=Text}"  TextChanged="tbox_resultPortion_TextChanged" GotFocus="tbox_resultPortion_GotFocus" ></TextBox>
+                                <TextBox Name="tbox_resultPortion" Margin="0,5,5,5" Width="50" HorizontalContentAlignment="Center" Text="{Binding ElementName=tbox_Servings,Path=Text}"  TextChanged="tbox_resultPortion_TextChanged"></TextBox>
                                 <TextBlock Text="person(s)." FontSize="14" VerticalAlignment="Center"></TextBlock>
                             </StackPanel>
                         </DockPanel>
                         <TextBlock Text="Ingredients required for the selected recipe" Margin="10,0" FontSize="14" DockPanel.Dock="Top"></TextBlock>
                         <ListBox Name="lbox_ingredientsRequired" Margin="10" DockPanel.Dock="Top">
                             <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <!--<CheckBox Name="{Binding IngredientName}"></CheckBox>-->
-                                    <TextBlock>
+                            <DataTemplate>
+                                <TextBlock>
                             <Run Text="{Binding IngredientName}"/>
                             <Run Text=" - "/>
                              <Run>
