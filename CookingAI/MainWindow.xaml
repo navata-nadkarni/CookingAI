@@ -42,7 +42,7 @@
                 <RowDefinition Height="182*"/>
                 <RowDefinition Height="50*"/>
             </Grid.RowDefinitions>
-            <StackPanel Name="spanel_Home" Grid.Row="0" VerticalAlignment="Center" Visibility="Hidden">
+            <StackPanel Name="spanel_Home" Grid.Row="0" VerticalAlignment="Center" Visibility="Visible">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50*"/>
@@ -56,7 +56,7 @@
                     </DockPanel>
                 </Grid>
             </StackPanel>
-            <Grid Name="spanel_Result" Grid.Row="0">
+            <Grid Name="spanel_Result" Grid.Row="0" Visibility="Hidden">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50*"/>
                     <RowDefinition Height="50*"/>
