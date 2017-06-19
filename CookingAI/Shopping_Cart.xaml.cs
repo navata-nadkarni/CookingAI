@@ -51,7 +51,7 @@ namespace CookingAI
             if (lview_Ingredients.SelectedItem != null)
             {
                 ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = 0;
-                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
+                //((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
                 _shoppingCartOptions.Add((Ingredient)lview_Ingredients.SelectedItem);
                 App._shoppingCart.Remove((Ingredient)lview_Ingredients.SelectedItem);
                 lview_Ingredients.ItemsSource = App._shoppingCart;
@@ -192,17 +192,6 @@ namespace CookingAI
 
         private void btn_Clear_Click(object sender, RoutedEventArgs e)
         {
-            /*if (lview_Ingredients.SelectedItem != null)
-            {
-                ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = 0;
-                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
-                _shoppingCartOptions.Add((Ingredient)lview_Ingredients.SelectedItem);
-                App._shoppingCart.Remove((Ingredient)lview_Ingredients.SelectedItem);
-                lview_Ingredients.ItemsSource = App._shoppingCart;
-                setControls();
-            }*/
-
-
             App._shoppingCart.Clear();
             refreshData();
             initializeWindow();
@@ -237,7 +226,7 @@ namespace CookingAI
             foreach (Ingredient item in App._allIngredients)
             {
                 item.IngredientQty = 0;
-                item.QuantityUnit = string.Empty;
+                //item.QuantityUnit = string.Empty;
                 _shoppingCartOptions.Add(item);
             }
 

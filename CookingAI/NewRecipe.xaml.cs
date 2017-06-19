@@ -45,7 +45,7 @@ namespace CookingAI
             Owner.Hide();
             setControls();
 
-            _localIngredients = App._ingredients.Select(i => new Ingredient { IngredientName = i.IngredientName, IngredientQty = 0, QuantityUnit = string.Empty, IsOptional = false }).ToList();
+            _localIngredients = App._ingredients.Select(i => new Ingredient { IngredientName = i.IngredientName, IngredientQty = 0, QuantityUnit = i.QuantityUnit, IsOptional = false }).ToList();
             lview_Ingredients.ItemsSource = _recipeIngredients;
         }
 
@@ -166,7 +166,7 @@ namespace CookingAI
             if (lview_Ingredients.SelectedItem != null)
             {
                 ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = 0;
-                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
+                //((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
                 _localIngredients.Add((Ingredient)lview_Ingredients.SelectedItem);
                 _recipeIngredients.Remove((Ingredient)lview_Ingredients.SelectedItem);
                 setControls();
@@ -202,7 +202,7 @@ namespace CookingAI
         private void addIngredients()
         {
             tblock_errorMessage.Text = string.Empty;
-            _localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false; i.QuantityUnit = string.Empty; });
+            _localIngredients.ForEach(i => { i.IngredientQty = 0; i.IsOptional = false;}); /*i.QuantityUnit = string.Empty;*/
             cbox_AddIngredients.SelectedIndex = -1;
             cbox_AddIngredients.ItemsSource = null;
             cbox_AddIngredients.ItemsSource = _localIngredients;

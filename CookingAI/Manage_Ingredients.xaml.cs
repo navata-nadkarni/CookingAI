@@ -51,7 +51,7 @@ namespace CookingAI
             if (lview_Ingredients.SelectedItem != null)
             {
                 ((Ingredient)lview_Ingredients.SelectedItem).IngredientQty = 0;
-                ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = "";
+               // ((Ingredient)lview_Ingredients.SelectedItem).QuantityUnit = string.Empty;
                 App.refreshData();
                 lview_Ingredients.ItemsSource = App._availableIngredients;
             }

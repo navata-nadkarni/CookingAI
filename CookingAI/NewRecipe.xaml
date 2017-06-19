@@ -85,7 +85,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
                                     <TextBlock Text="Unit for quantity" Width="100"></TextBlock>
-                                    <TextBox Name="tbox_unit" Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" Text="{Binding QuantityUnit}"></TextBox>
+                                    <TextBox Name="tbox_unit" Width="100" DataContext="{Binding ElementName=cbox_AddIngredients, Path=SelectedItem}" IsEnabled="False" Text="{Binding QuantityUnit}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20,5,0,5">
                                     <TextBlock Text="Is Optional" Width="100"></TextBlock>

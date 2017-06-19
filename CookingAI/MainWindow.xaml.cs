@@ -208,8 +208,8 @@ namespace CookingAI
                 if (temp != null)
                 {
                     temp.IngredientQty = temp.IngredientQty - item.IngredientQty;
-                    if (temp.IngredientQty == 0)
-                        temp.QuantityUnit = string.Empty;
+                    //if (temp.IngredientQty == 0)
+                    //    temp.QuantityUnit = string.Empty;
                 }
 
             }
